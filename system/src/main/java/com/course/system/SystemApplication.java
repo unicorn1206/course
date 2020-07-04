@@ -11,7 +11,7 @@ import org.springframework.core.env.Environment;
 
 @SpringBootApplication
 @EnableEurekaClient
-@MapperScan("com.course.system.mapper")
+@MapperScan("com.course.server.mapper")
 @ComponentScan("com.course")
 public class SystemApplication {
 
