@@ -20,7 +20,7 @@ export default new Router({
         component:Admin,
         children:[{
             path:'welcome',//子路由前面无"/"
-            component:Welcome,
+            component:Welcome
         }]
     }]
 })
