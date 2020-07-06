@@ -357,15 +357,15 @@
                 </div><!-- /.sidebar-shortcuts -->
 
                 <ul class="nav nav-list">
-                    <li class="">
-                        <a href="index.html">
+                    <li class="" id="welcome-sidebar">
+                        <router-link to="/admin/welcome">
                             <i class="menu-icon fa fa-tachometer"></i>
                             <span class="menu-text"> 欢迎 </span>
-                        </a>
+                        </router-link>
 
                         <b class="arrow"></b>
                     </li>
-                    <li class="active open">
+                    <li class="">
                         <a href="#" class="dropdown-toggle">
                             <i class="menu-icon fa fa-list"></i>
                             <span class="menu-text"> 系统管理 </span>
@@ -390,6 +390,27 @@
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     权限管理
                                 </a>
+
+                                <b class="arrow"></b>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="active open">
+                        <a href="#" class="dropdown-toggle">
+                            <i class="menu-icon fa fa-list"></i>
+                            <span class="menu-text"> 业务管理 </span>
+
+                            <b class="arrow fa fa-angle-down"></b>
+                        </a>
+
+                        <b class="arrow"></b>
+
+                        <ul class="submenu">
+                            <li class="" id="business-chapter-sidebar">
+                                <router-link to="/admin/business/chapter">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    大章管理
+                                </router-link>
 
                                 <b class="arrow"></b>
                             </li>
@@ -455,7 +476,24 @@
         mounted() {
             $('body').removeClass('login-layout light-login');
             $('body').attr('class', 'no-skin');
+        },
+        methods:{
+            activeSideBar:function (id) {
+                //兄弟菜单去掉active样式，自身增加active样式
+                $("#" + id).siblings().removeClass('active');
+                $("#" + id).siblings().find('li').removeClass('active');
+                $("#" + id).addClass('active');
+
+                //如果有父菜单，父菜单的兄弟菜单去掉active open样式，父菜单增加active open样式
+                let parentLi = $("#" + id).parents('li');
+                if(parentLi){
+                    parentLi.siblings().removeClass("active open");
+                    parentLi.addClass("active open");
+                }
+
+            }
         }
+
     }
 </script>
 
