@@ -10,14 +10,14 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")//访问地址与包名对应
+@RequestMapping("/admin/chapter")//访问地址与包名对应
 public class ChapterController {
 
     @Resource
     private ChapterService chapterService;
 
-    @RequestMapping("/chapter")
-    public List<ChapterDto> chapter(){
+    @RequestMapping("/list")
+    public List<ChapterDto> list(){
         return chapterService.list();
     }
 }
