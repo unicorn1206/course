@@ -1,11 +1,17 @@
 <template>
     <div>
         <p>
-            <button v-on:click="list()" class="btn btn-white btn-default btn-round">
+            <button v-on:click="list(1)" class="btn btn-white btn-default btn-round">
                 <i class="ace-icon fa fa-refresh"></i>
                 刷新
             </button>
         </p>
+
+        <!--ref属性：组件别名,v-bind,绑定一个方法，左边list为子组件内部定义，暴露给外部的一个回调方法
+        ，右边list是当前组件的list方法，作用：点击按钮的时候要执行什么方法-->
+<!--        <pagination ref="pagination" v-bind:list="list"></pagination>-->
+        <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="6"></pagination>
+
         <table id="simple-table" class="table  table-bordered table-hover">
                     <thead>
                     <tr>
@@ -82,7 +88,9 @@
 </template>
 
 <script>
+    import Pagination from '../../components/pagination'//引入子组件2-1
     export default {
+        components:{Pagination},//引入子组件2-2
         name: "chapter",
         data:function(){
             return{
@@ -92,17 +100,18 @@
         mounted:function () {
             //this.$parent.activeSideBar("business-chapter-sidebar");
             let _this = this;
-            _this.list();
+            _this.list(1);
         },
         methods:{
-            list(){
+            list(page){
                 let _this = this;
                 _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/list',{
-                    page:1,
-                    size:1
+                    page:page,
+                    size:_this.$refs.pagination.size//获取组件内部的size变量
                 }).then((response)=>{
                     console.log(response);
                     _this.chapters = response.data.list;
+                    _this.$refs.pagination.render(page,response.data.total);//重新渲染当前组件，所选页数的底色
                 })
             }
         }

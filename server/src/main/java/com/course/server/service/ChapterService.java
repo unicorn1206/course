@@ -6,6 +6,7 @@ import com.course.server.dto.ChapterDto;
 import com.course.server.dto.PageDto;
 import com.course.server.mapper.ChapterMapper;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class ChapterService {
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());//第几页、每页有几条
         ChapterExample chapterExample = new ChapterExample();
         List<Chapter> chapterList = chapterMapper.selectByExample(chapterExample);
+        PageInfo<Chapter> pageInfo = new PageInfo<>(chapterList);
         List<ChapterDto> chapterDtoList = new ArrayList<>();
         for (int i = 0; i < chapterList.size(); i++) {
             Chapter chapter = chapterList.get(i);
@@ -30,7 +32,7 @@ public class ChapterService {
             BeanUtils.copyProperties(chapter,chapterDto);
             chapterDtoList.add(chapterDto);
         }
-        pageDto.setTotal(chapterDtoList.size());
+        pageDto.setTotal(pageInfo.getTotal());
         pageDto.setList(chapterDtoList);
         return pageDto;
     }
