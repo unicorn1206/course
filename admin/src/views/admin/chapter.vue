@@ -100,6 +100,7 @@
         mounted:function () {
             //this.$parent.activeSideBar("business-chapter-sidebar");
             let _this = this;
+            _this.$refs.pagination.size=5;
             _this.list(1);
         },
         methods:{
