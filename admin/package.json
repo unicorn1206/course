@@ -39,7 +39,8 @@
       "no-debugger": "off",
       "no-undef": "off",
       "vue/no-unused-vars": "off",
-      "vue/required-v-for-key": "off"
+      "vue/required-v-for-key": "off",
+      "no-unused-vars": "off"
     }
   },
   "browserslist": [
