@@ -1,28 +1,29 @@
-const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000
-})
-
-
-toast = {
+Toast = {
     success:function (message) {
-        Toast.fire({
+        Swal.fire({
+            position: 'top-end',
             type: 'success',
-            title: message
+            title: message,
+            showConfirmButton: false,
+            timer: 3000
         })
     },
     error:function (message) {
-        Toast.fire({
-            type: 'success',
-            title: message
+        Swal.fire({
+            position: 'top-end',
+            type: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 3000
         })
     },
     warning:function (message) {
-        Toast.fire({
-            type: 'success',
-            title: message
+        Swal.fire({
+            position: 'top-end',
+            type: 'warning',
+            title: message,
+            showConfirmButton: false,
+            timer: 3000
         })
     },
 }
