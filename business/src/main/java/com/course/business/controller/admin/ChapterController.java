@@ -15,6 +15,8 @@ import java.util.List;
 @RequestMapping("/admin/chapter")//访问地址与包名对应
 public class ChapterController {
 
+    public static final String BUSINESS_NAME = "大章";
+
     @Resource
     private ChapterService chapterService;
 
