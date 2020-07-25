@@ -1,4 +1,4 @@
-package com.course.business.controller.admin;
+package com.course.${module}.controller.admin;
 
 import com.course.server.domain.${Domain};
 import com.course.server.dto.${Domain}Dto;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/admin/${domain}")//访问地址与包名对应
 public class ${Domain}Controller {
 
-    public static final String BUSINESS_NAME = "大章";
+    public static final String BUSINESS_NAME = "${tableNameCn}";
 
     @Resource
     private ${Domain}Service ${domain}Service;
