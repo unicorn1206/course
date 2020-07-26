@@ -415,6 +415,16 @@
                                 <b class="arrow"></b>
                             </li>
                         </ul>
+                        <ul class="submenu">
+                            <li class="" id="business-section-sidebar">
+                                <router-link to="/business/section">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    小节管理
+                                </router-link>
+
+                                <b class="arrow"></b>
+                            </li>
+                        </ul>
                     </li>
                 </ul><!-- /.nav-list -->
 

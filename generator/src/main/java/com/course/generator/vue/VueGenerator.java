@@ -1,23 +1,21 @@
-package com.course.generator.server;
+package com.course.generator.vue;
 
 import com.course.generator.util.DbUtil;
 import com.course.generator.util.Field;
 import com.course.generator.util.FreemarkerUtil;
-
-import java.io.File;
-import java.util.*;
-
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-public class ServerGenerator {
+import java.io.File;
+import java.util.*;
+
+public class VueGenerator {
 
     static String MODULE = "business";
-    static String toServicePath = "server//src//main//java//com//course//server//service//";
-    static String toControllerPath = MODULE + "//src//main//java//com//course//" + MODULE + "//controller//admin//";
-    static String toDtoPath = "server//src//main//java//com//course//server//dto//";
+    static String toVuePath = "admin//src//views//admin//";
     static String generatorConfigPath = "server//src//main//resources//generator//generatorConfig.xml";
+
 
     public static void main(String[] args) throws Exception {
         String module = MODULE;
@@ -51,17 +49,10 @@ public class ServerGenerator {
         map.put("fieldList",fieldList);
         map.put("typeSet",typeSet);
 
-        //生成dto
-        FreemarkerUtil.initConfig("dto.ftl");
-        FreemarkerUtil.generator(toDtoPath + Domain + "Dto.java",map);
+        //生成vue
+        FreemarkerUtil.initConfig("vue.ftl");
+        FreemarkerUtil.generator(toVuePath + domain + ".vue",map);
 
-        //生成service
-        FreemarkerUtil.initConfig("service.ftl");
-        FreemarkerUtil.generator(toServicePath + Domain + "Service.java",map);
-
-        //生成controller
-        FreemarkerUtil.initConfig("controller.ftl");
-        FreemarkerUtil.generator(toControllerPath + Domain + "Controller.java",map);
     }
 
     /**
