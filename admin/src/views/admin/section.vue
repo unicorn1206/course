@@ -59,14 +59,8 @@
                                     <div class="col-sm-10">
                                         <input  v-model="section.sort" class="form-control">
                                     </div>
-                                    <label  class="col-sm-2 control-label">创建时间</label>
-                                    <div class="col-sm-10">
-                                        <input  v-model="section.createAt" class="form-control">
-                                    </div>
-                                    <label  class="col-sm-2 control-label">更新时间</label>
-                                    <div class="col-sm-10">
-                                        <input  v-model="section.updateAt" class="form-control">
-                                    </div>
+
+
                             </div>
                         </form>
                     </div>
@@ -89,8 +83,8 @@
                             <th>时长</th>
                             <th>收费</th>
                             <th>顺序</th>
-                            <th>创建时间</th>
-                            <th>更新时间</th>
+
+
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -105,8 +99,8 @@
                             <td>{{section.time}}</td>
                             <td>{{section.charge}}</td>
                             <td>{{section.sort}}</td>
-                            <td>{{section.createAt}}</td>
-                            <td>{{section.updateAt}}</td>
+
+
                         <td>
                             <div class="hidden-sm hidden-xs btn-group">
 
