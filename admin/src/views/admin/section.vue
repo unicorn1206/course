@@ -27,7 +27,7 @@
                     <div class="modal-body">
                         <form class="form-horizontal">
                             <div class="form-group">
-                                    <label  class="col-sm-2 control-label">ID</label>
+                                                                    <label  class="col-sm-2 control-label">ID</label>
                                     <div class="col-sm-10">
                                         <input  v-model="section.id" class="form-control">
                                     </div>
@@ -225,42 +225,49 @@
                 //     couseId:this.courseId,
                 //     name:this.name
                 // }
+                // 保存校验
+                if (1 != 1
+                    || !Validator.require(_this.section.title, "标题")
+                    || !Validator.length(_this.section.title, "标题", 1, 50)
+                    || !Validator.length(_this.section.video, "视频", 1, 200)
+                ) {
+                    return;
+                }
+          Loading.show();
+          _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/admin/section/save', _this.section
+          ).then((response)=>{
+              Loading.hide();
+              let resp = response.data;
+              if(resp.success){
+                  $('#form-modal').modal('hide');
+                  _this.list(1);
+                  Toast.success('保存成功');
+              }else{
+                  Toast.warning(resp.message);
+              }
 
-                Loading.show();
-                _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/admin/section/save', _this.section
-                ).then((response)=>{
-                    Loading.hide();
-                    let resp = response.data;
-                    if(resp.success){
-                        $('#form-modal').modal('hide');
-                        _this.list(1);
-                        Toast.success('保存成功');
-                    }else{
-                        Toast.warning(resp.message);
-                    }
+          })
+      },
+      /**
+       * 点击【删除】
+       */
+      del(id){
+          let _this = this;
+          Confirm.show("删除小节后不可恢复，确认删除？",function () {
+              Loading.show();
+              _this.$ajax.delete(process.env.VUE_APP_SERVER +  '/business/admin/section/delete/' + id
+              ).then((response)=>{
+                  Loading.hide();
+                  let resp = response.data;
+                  if(resp.success){
+                      _this.list(1);
+                      Toast.success('删除成功');
+                  }
+              })
+          });
 
-                })
-            },
-            /**
-             * 点击【删除】
-             */
-            del(id){
-                let _this = this;
-                Confirm.show("删除小节后不可恢复，确认删除？",function () {
-                    Loading.show();
-                    _this.$ajax.delete(process.env.VUE_APP_SERVER +  '/business/admin/section/delete/' + id
-                    ).then((response)=>{
-                        Loading.hide();
-                        let resp = response.data;
-                        if(resp.success){
-                            _this.list(1);
-                            Toast.success('删除成功');
-                        }
-                    })
-                });
-
-            }
-        }
-    }
+      }
+  }
+}
 </script>
 
