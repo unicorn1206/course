@@ -116,7 +116,7 @@
     import Pagination from '../../components/pagination'//引入子组件2-1
     export default {
         components:{Pagination},//引入子组件2-2
-        name: "${domain}",
+        name: "${module}-${domain}",
         data:function(){
             return{
                 ${domain}:{},//新增时，弹出框的值

@@ -160,7 +160,7 @@
     import Pagination from '../../components/pagination'//引入子组件2-1
     export default {
         components:{Pagination},//引入子组件2-2
-        name: "section",
+        name: "business-section",
         data:function(){
             return{
                 section:{},//新增时，弹出框的值
