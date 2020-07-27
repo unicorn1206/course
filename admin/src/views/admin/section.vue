@@ -53,7 +53,9 @@
                                     </div>
                                     <label  class="col-sm-2 control-label">收费</label>
                                     <div class="col-sm-10">
-                                        <input  v-model="section.charge" class="form-control">
+                                        <select  v-model="section.charge" class="form-control">
+                                            <option v-for="o in CHARGE" v-bind:key="o.key" v-bind:value="o.key">{{o.value}}</option>
+                                        </select>
                                     </div>
                                     <label  class="col-sm-2 control-label">顺序</label>
                                     <div class="col-sm-10">
@@ -97,7 +99,8 @@
                             <td>{{section.chapterId}}</td>
                             <td>{{section.video}}</td>
                             <td>{{section.time}}</td>
-                            <td>{{section.charge}}</td>
+                            <!--CHARGE为optionKV的第一个参数-->
+                            <td>{{CHARGE | optionKV(section.charge)}}</td>
                             <td>{{section.sort}}</td>
 
 
@@ -163,7 +166,8 @@
                 section:{},//新增时，弹出框的值
                 // courseId:"",
                 // name:'',
-                sections:[]//列表展示
+                sections:[],//列表展示
+                CHARGE: [{key: 'C',value: '收费'}, {key: 'F', value: '免费'}]
             }
         },
         mounted:function () {
