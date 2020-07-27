@@ -54,7 +54,7 @@
                                     <label  class="col-sm-2 control-label">收费</label>
                                     <div class="col-sm-10">
                                         <select  v-model="section.charge" class="form-control">
-                                            <option v-for="o in CHARGE" v-bind:key="o.key" v-bind:value="o.key">{{o.value}}</option>
+                                            <option v-for="o in SECTION_CHARGE" v-bind:key="o.key" v-bind:value="o.key">{{o.value}}</option>
                                         </select>
                                     </div>
                                     <label  class="col-sm-2 control-label">顺序</label>
@@ -100,7 +100,7 @@
                             <td>{{section.video}}</td>
                             <td>{{section.time}}</td>
                             <!--CHARGE为optionKV的第一个参数-->
-                            <td>{{CHARGE | optionKV(section.charge)}}</td>
+                            <td>{{SECTION_CHARGE | optionKV(section.charge)}}</td>
                             <td>{{section.sort}}</td>
 
 
@@ -167,7 +167,7 @@
                 // courseId:"",
                 // name:'',
                 sections:[],//列表展示
-                CHARGE: CHARGE
+                SECTION_CHARGE: SECTION_CHARGE
             }
         },
         mounted:function () {
