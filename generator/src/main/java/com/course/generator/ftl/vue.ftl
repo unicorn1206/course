@@ -27,13 +27,13 @@
                     <div class="modal-body">
                         <form class="form-horizontal">
                             <#list fieldList as field>
-                                <#if field.name!="id" && field.nameHump!="createdAt" && field.nameHump!="updatedAt">
+                                <#if field.name!="id" && field.nameHump!="createAt" && field.nameHump!="updateAt">
                                     <#if field.enums>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">${field.nameCn}</label>
                                 <div class="col-sm-10">
                                     <select v-model="${domain}.${field.nameHump}" class="form-control">
-                                        <option v-for="o in ${field.enumsConst}" v-bind:value="o.key">{{o.value}}</option>
+                                        <option v-for="o in ${field.enumsConst}" v-bind:key="o.key" v-bind:value="o.key">{{o.value}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -138,7 +138,7 @@
                 ${domain}:{},//新增时，弹出框的值
                 // courseId:"",
                 // name:'',
-                ${domain}s:[]//列表展示
+                ${domain}s:[],//列表展示
                 <#list fieldList as field>
                 <#if field.enums>
                 ${field.enumsConst}: ${field.enumsConst},
@@ -202,7 +202,7 @@
                 // 保存校验
                 if (1 != 1
                     <#list fieldList as field>
-                    <#if field.name!="id" && field.nameHump!="createdAt" && field.nameHump!="updatedAt" && field.nameHump!="sort">
+                    <#if field.name!="id" && field.nameHump!="createAt" && field.nameHump!="updateAt" && field.nameHump!="sort">
                     <#if !field.nullAble>
                     || !Validator.require(_this.${domain}.${field.nameHump}, "${field.nameCn}")
                     </#if>

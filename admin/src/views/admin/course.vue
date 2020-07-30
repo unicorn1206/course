@@ -60,7 +60,7 @@
                                 <label class="col-sm-2 control-label">级别</label>
                                 <div class="col-sm-10">
                                     <select v-model="course.level" class="form-control">
-                                        <option v-for="o in COURSE_LEVEL" v-bind:value="o.key">{{o.value}}</option>
+                                        <option v-for="o in COURSE_LEVEL" v-bind:key="o.key" v-bind:value="o.key">{{o.value}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -68,7 +68,7 @@
                                 <label class="col-sm-2 control-label">收费</label>
                                 <div class="col-sm-10">
                                     <select v-model="course.charge" class="form-control">
-                                        <option v-for="o in COURSE_CHARGE" v-bind:value="o.key">{{o.value}}</option>
+                                        <option v-for="o in COURSE_CHARGE" v-bind:key="o.key" v-bind:value="o.key">{{o.value}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@
                                 <label class="col-sm-2 control-label">状态</label>
                                 <div class="col-sm-10">
                                     <select v-model="course.status" class="form-control">
-                                        <option v-for="o in COURSE_STATUS" v-bind:value="o.key">{{o.value}}</option>
+                                        <option v-for="o in COURSE_STATUS" v-bind:key="o.key" v-bind:value="o.key">{{o.value}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -92,18 +92,6 @@
                                     <input v-model="course.sort" class="form-control">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">创建时间</label>
-                                <div class="col-sm-10">
-                                    <input v-model="course.createAt" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">更新时间</label>
-                                <div class="col-sm-10">
-                                    <input v-model="course.updateAt" class="form-control">
-                                </div>
-                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -114,88 +102,48 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
-        <table id="simple-table" class="table  table-bordered table-hover">
-                    <thead>
-                    <tr>
-                            <th>ID</th>
-                            <th>名称</th>
-                            <th>概述</th>
-                            <th>时长</th>
-                            <th>价格（元）</th>
-                            <th>封面</th>
-                            <th>级别</th>
-                            <th>收费</th>
-                            <th>状态</th>
-                            <th>报名数</th>
-                            <th>顺序</th>
+        <div class="row">
+            <div class="col-md-4" v-for="course in courses" v-bind:key="course.id">
+                <div class="thumbnail search-thumbnail">
+                    <img v-show="!course.image" class="media-object" src="/static/image/demo-course.jpg" />
+                    <img v-show="course.image" class="media-object" v-bind:src=course.image />
+                    <div class="caption">
+                        <div class="clearfix">
+                            <span class="pull-right label label-primary info-label">
+                                {{COURSE_LEVEL | optionKV(course.level)}}
+                            </span>
+                            <span class="pull-right label label-primary info-label">
+                                {{COURSE_CHARGE | optionKV(course.charge)}}
+                            </span>
+                            <span class="pull-right label label-primary info-label">
+                                {{COURSE_STATUS | optionKV(course.status)}}
+                            </span>
+                        </div>
 
+                        <h3 class="search-title">
+                            <a href="#" class="blue">{{course.name}}</a>
+                        </h3>
+                        <p class="blue bolder bigger-150">{{course.price}}&nbsp;<i class="fa fa-rmb"></i></p>
+                        <p>{{course.summary}}</p>
+                        <p>
+                            <span class="badge badge-info">{{course.id}}</span>
+                            <span class="badge badge-info">排序：{{course.sort}}</span>
+                            <span class="badge badge-info">时长：{{course.time}}</span>
+                        </p>
+                        <p>
+                            <button v-on:click="edit(course)" class="btn btn-white btn-xs btn-info btn-round">
+                                编辑
+                            </button>
 
-                        <th>操作</th>
-                    </tr>
-                    </thead>
+                            <button v-on:click="del(course.id)" class="btn btn-white btn-xs btn-waring btn-round">
+                                删除
+                            </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    <tbody>
-                    <tr v-for="course in courses" v-bind:key="course.id">
-                        <td>{{course.id}}</td>
-                        <td>{{course.name}}</td>
-                        <td>{{course.summary}}</td>
-                        <td>{{course.time}}</td>
-                        <td>{{course.price}}</td>
-                        <td>{{course.image}}</td>
-                        <td>{{COURSE_LEVEL | optionKV(course.level)}}</td>
-                        <td>{{COURSE_CHARGE | optionKV(course.charge)}}</td>
-                        <td>{{COURSE_STATUS | optionKV(course.status)}}</td>
-                        <td>{{course.enroll}}</td>
-                        <td>{{course.sort}}</td>
-                        <td>
-                            <div class="hidden-sm hidden-xs btn-group">
-
-                                <button v-on:click="edit(course)" class="btn btn-xs btn-info">
-                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                </button>
-
-                                <button v-on:click="del(course.id)" class="btn btn-xs btn-danger">
-                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                </button>
-                            </div>
-
-                            <div class="hidden-md hidden-lg">
-                                <div class="inline pos-rel">
-                                    <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                        <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                                    </button>
-
-                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                        <li>
-                                            <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-                                                                                <span class="blue">
-                                                                                    <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                                                                                </span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-                                                                                <span class="green">
-                                                                                    <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-                                                                                </span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                                                                <span class="red">
-                                                                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                                </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
     </div>
 </template>
 
@@ -209,7 +157,7 @@
                 course:{},//新增时，弹出框的值
                 // courseId:"",
                 // name:'',
-                courses:[]//列表展示
+                courses:[],//列表展示
                 COURSE_LEVEL: COURSE_LEVEL,
                 COURSE_CHARGE: COURSE_CHARGE,
                 COURSE_STATUS: COURSE_STATUS,
@@ -315,3 +263,9 @@
 }
 </script>
 
+<style scoped>
+    /*scoped:样式只作用于当前组件，防止互相渲染*/
+   .caption h3{
+       font-size: 20px;
+   }
+</style>
