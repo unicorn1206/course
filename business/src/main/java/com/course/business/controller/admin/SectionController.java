@@ -4,6 +4,7 @@ import com.course.server.domain.Section;
 import com.course.server.dto.SectionDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
+import com.course.server.dto.SectionPageDto;
 import com.course.server.service.SectionService;
 import com.course.server.util.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +25,12 @@ public class SectionController {
      * 列表查询
      */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto){
+    public ResponseDto list(@RequestBody SectionPageDto sectionPageDto){
         ResponseDto responseDto = new ResponseDto();
-        sectionService.list(pageDto);
-        responseDto.setContent(pageDto);
+        ValidatorUtil.require(sectionPageDto.getChapterId(), "大章");
+        ValidatorUtil.require(sectionPageDto.getCourseId(), "课程");
+        sectionService.list(sectionPageDto);
+        responseDto.setContent(sectionPageDto);
         return responseDto;
     }
 

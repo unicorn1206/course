@@ -1,5 +1,12 @@
 <template>
     <div>
+        <h4 class="lighter">
+            <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
+            <router-link to="/business/course" data-toggle="modal" class="pink">{{course.name}}：</router-link>
+            <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
+            <router-link to="/business/chapter" data-toggle="modal" class="pink">{{chapter.name}}</router-link>
+        </h4>
+        <hr>
         <p>
             <button v-on:click="add()" class="btn btn-white btn-default btn-round">
                 <i class="ace-icon fa fa-edit"></i>
@@ -27,7 +34,7 @@
                     <div class="modal-body">
                         <form class="form-horizontal">
                             <div class="form-group">
-                                                                    <label  class="col-sm-2 control-label">ID</label>
+                                    <label  class="col-sm-2 control-label">ID</label>
                                     <div class="col-sm-10">
                                         <input  v-model="section.id" class="form-control">
                                     </div>
@@ -37,11 +44,11 @@
                                     </div>
                                     <label  class="col-sm-2 control-label">课程</label>
                                     <div class="col-sm-10">
-                                        <input  v-model="section.courseId" class="form-control">
+                                        <p class="form-control-static">{{course.name}}</p>
                                     </div>
                                     <label  class="col-sm-2 control-label">大章</label>
                                     <div class="col-sm-10">
-                                        <input  v-model="section.chapterId" class="form-control">
+                                        <p class="form-control-static">{{chapter.name}}</p>
                                     </div>
                                     <label  class="col-sm-2 control-label">视频</label>
                                     <div class="col-sm-10">
@@ -79,8 +86,6 @@
                     <tr>
                             <th>ID</th>
                             <th>标题</th>
-                            <th>课程</th>
-                            <th>大章</th>
                             <th>视频</th>
                             <th>时长</th>
                             <th>收费</th>
@@ -95,8 +100,6 @@
                     <tr v-for="section in sections" v-bind:key="section.id">
                             <td>{{section.id}}</td>
                             <td>{{section.title}}</td>
-                            <td>{{section.courseId}}</td>
-                            <td>{{section.chapterId}}</td>
                             <td>{{section.video}}</td>
                             <td>{{section.time}}</td>
                             <!--CHARGE为optionKV的第一个参数-->
@@ -167,13 +170,22 @@
                 // courseId:"",
                 // name:'',
                 sections:[],//列表展示
-                SECTION_CHARGE: SECTION_CHARGE
+                SECTION_CHARGE: SECTION_CHARGE,
+                course:{},
+                chapter:{}
             }
         },
         mounted:function () {
             //this.$parent.activeSideBar("business-section-sidebar");
             let _this = this;
             _this.$refs.pagination.size=5;
+            let course = SessionStorage.get("course") || {};
+            let chapter = SessionStorage.get("chapter") || {};
+            if(Tool.isEmpty(course) || Tool.isEmpty(chapter)){
+                _this.$router.push("/welcome");
+            }
+            _this.course = course;
+            _this.chapter = chapter;
             _this.list(1);
         },
         methods:{
@@ -205,7 +217,9 @@
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/admin/section/list',{
                     page:page,
-                    size:_this.$refs.pagination.size//获取组件内部的size变量
+                    size:_this.$refs.pagination.size,//获取组件内部的size变量
+                    courseId:_this.course.id,
+                    chapterId:_this.chapter.id
                 }).then((response)=>{
                     Loading.hide();
                     let resp = response.data;
@@ -231,8 +245,12 @@
                 ) {
                     return;
                 }
+
+                _this.section.courseId = _this.course.id;
+                _this.section.chapterId = _this.chapter.id;
+
           Loading.show();
-          _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/admin/section/save', _this.section
+          _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/admin/section/save', _this.section,
           ).then((response)=>{
               Loading.hide();
               let resp = response.data;
