@@ -36,6 +36,12 @@ insert into category values ('00000405','00000400','数据分析&挖掘',405);
 insert into category values ('00000500','00000000','云计算&大数据',500);
 insert into category values ('00000501','00000500','大数据',501);
 insert into category values ('00000502','00000500','hadoop',502);
+insert into category values ('00000600','00000000','运维测试',600);
+insert into category values ('00000601','00000600','运维',601);
+insert into category values ('00000602','00000600','测试',602);
+insert into category values ('00000700','00000000','数据库',702);
+insert into category values ('00000701','00000700','oracle',701);
+insert into category values ('00000702','00000700','mySql',702);
 
 drop table if exists course;
 create table course(

@@ -1,74 +1,31 @@
 <template>
     <div>
-        <p>
-            <button v-on:click="add()" class="btn btn-white btn-default btn-round">
-                <i class="ace-icon fa fa-edit"></i>
-                新增
-            </button>
-            &nbsp;
-            <button v-on:click="list(1)" class="btn btn-white btn-default btn-round">
-                <i class="ace-icon fa fa-refresh"></i>
-                刷新
-            </button>
-        </p>
-
-        <!--ref属性：组件别名,v-bind,绑定一个方法，左边list为子组件内部定义，暴露给外部的一个回调方法
-        ，右边list是当前组件的list方法，作用：点击按钮的时候要执行什么方法-->
-<!--        <pagination ref="pagination" v-bind:list="list"></pagination>-->
-        <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="6"></pagination>
-
-        <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">表单</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal">
-                                                        <div class="form-group">
-                                <label class="col-sm-2 control-label">父id</label>
-                                <div class="col-sm-10">
-                                    <input v-model="category.parent" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">名称</label>
-                                <div class="col-sm-10">
-                                    <input v-model="category.name" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">顺序</label>
-                                <div class="col-sm-10">
-                                    <input v-model="category.sort" class="form-control">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary" v-on:click="save()">保存</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-
-        <table id="simple-table" class="table  table-bordered table-hover">
+        <div class="row">
+            <div class="col-md-6">
+                <p>
+                    <button v-on:click="add()" class="btn btn-white btn-default btn-round">
+                        <i class="ace-icon fa fa-edit"></i>
+                        新增
+                    </button>
+                    &nbsp;
+                    <button v-on:click="all()" class="btn btn-white btn-default btn-round">
+                        <i class="ace-icon fa fa-refresh"></i>
+                        刷新
+                    </button>
+                </p>
+                <table id="level1-table" class="table  table-bordered table-hover">
                     <thead>
                     <tr>
-                            <th>id</th>
-                            <th>父id</th>
-                            <th>名称</th>
-                            <th>顺序</th>
+                        <th>id</th>
+                        <th>名称</th>
+                        <th>顺序</th>
                         <th>操作</th>
                     </tr>
                     </thead>
 
                     <tbody>
-                    <tr v-for="category in categorys" v-bind:key="category.id">
+                    <tr v-for="category in level1" v-bind:key="category.id" v-on:click="onClickLevel1(category)" v-bind:class="{'active':category.id === active.id}">
                         <td>{{category.id}}</td>
-                        <td>{{category.parent}}</td>
                         <td>{{category.name}}</td>
                         <td>{{category.sort}}</td>
                         <td>
@@ -120,13 +77,125 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="col-md-6">
+                <p>
+                    <button v-on:click="add()" class="btn btn-white btn-default btn-round">
+                        <i class="ace-icon fa fa-edit"></i>
+                        新增
+                    </button>
+                </p>
+                <table id="simple-table" class="table  table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>名称</th>
+                        <th>顺序</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr v-for="category in level2" v-bind:key="category.id">
+                        <td>{{category.id}}</td>
+                        <td>{{category.name}}</td>
+                        <td>{{category.sort}}</td>
+                        <td>
+                            <div class="hidden-sm hidden-xs btn-group">
+
+                                <button v-on:click="edit(category)" class="btn btn-xs btn-info">
+                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                </button>
+
+                                <button v-on:click="del(category.id)" class="btn btn-xs btn-danger">
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                </button>
+                            </div>
+
+                            <div class="hidden-md hidden-lg">
+                                <div class="inline pos-rel">
+                                    <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                        <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                        <li>
+                                            <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                                <span class="blue">
+                                                                                    <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                                                </span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                                                <span class="green">
+                                                                                    <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                                                                                </span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                                                <span class="red">
+                                                                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">表单</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                                                        <div class="form-group">
+                                <label class="col-sm-2 control-label">父id</label>
+                                <div class="col-sm-10">
+                                    <input v-model="category.parent" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">名称</label>
+                                <div class="col-sm-10">
+                                    <input v-model="category.name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">顺序</label>
+                                <div class="col-sm-10">
+                                    <input v-model="category.sort" class="form-control">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" v-on:click="save()">保存</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
     </div>
 </template>
 
 <script>
-    import Pagination from '../../components/pagination'//引入子组件2-1
     export default {
-        components:{Pagination},//引入子组件2-2
         name: "business-category",
         data:function(){
             return{
@@ -134,13 +203,15 @@
                 // courseId:"",
                 // name:'',
                 categorys:[],//列表展示
+                level1:[],
+                level2:[],
+                active:{}
             }
         },
         mounted:function () {
             //this.$parent.activeSideBar("business-category-sidebar");
             let _this = this;
-            _this.$refs.pagination.size=5;
-            _this.list(1);
+            _this.all();
         },
         methods:{
             /**
@@ -166,19 +237,34 @@
             /**
              * 列表查询
              */
-            list(page){
+            all(){
                 let _this = this;
                 Loading.show();
-                _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/admin/category/list',{
-                    page:page,
-                    size:_this.$refs.pagination.size//获取组件内部的size变量
-                }).then((response)=>{
+                _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/admin/category/all').then((response)=>{
                     Loading.hide();
                     let resp = response.data;
-                    _this.categorys = resp.content.list;
-                    _this.$refs.pagination.render(page,resp.content.total);//重新渲染当前组件，所选页数的底色
+                    _this.categorys = resp.content;
+                    //将所有的记录格式化成树形结构
+                    _this.level1 = [];
+                    for(let i = 0;i < _this.categorys.length;i++){
+                        let c = _this.categorys[i];
+                        if(c.parent == '00000000'){
+                            _this.level1.push(c);
+                        }
+                        for(let j = 0;j < _this.categorys.length;j++){
+                            let child = _this.categorys[j];
+                            if(child.parent == c.id){
+                                if(Tool.isEmpty( c.children)){
+                                    c.children = [];
+                                }
+                                c.children.push(child);
+                            }
+                        }
+                    }
                 })
             },
+
+
 
             /**
              * 点击【保存】
@@ -204,7 +290,7 @@
               let resp = response.data;
               if(resp.success){
                   $('#form-modal').modal('hide');
-                  _this.list(1);
+                  _this.all();
                   Toast.success('保存成功');
               }else{
                   Toast.warning(resp.message);
@@ -224,14 +310,23 @@
                   Loading.hide();
                   let resp = response.data;
                   if(resp.success){
-                      _this.list(1);
+                      _this.all();
                       Toast.success('删除成功');
                   }
               })
           });
 
-      }
+      },
+            onClickLevel1(category){
+                let _this = this;
+                _this.active.id = category.id;
+                _this.level2 = category.children;
+            }
   }
 }
 </script>
-
+<style>
+    .active td{
+        background-color: #d6e9c6 !important;
+    }
+</style>
