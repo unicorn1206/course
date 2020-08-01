@@ -11,8 +11,9 @@ Loading = {
         });
     },
     hide:function () {
-        setTimeout(function () {
-            $.unblockUI();
-        },500)
+        $.unblockUI();
+        // setTimeout(function () {
+        //     $.unblockUI();
+        // },500)
     }
 };
