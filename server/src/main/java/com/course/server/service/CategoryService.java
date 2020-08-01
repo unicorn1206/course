@@ -77,6 +77,21 @@ public class CategoryService {
      * 删除
      */
     public void delete(String id) {
+        deleteChildren(id);
         categoryMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 删除子分类
+     * @param id
+     */
+    private void deleteChildren(String id) {
+        Category category = categoryMapper.selectByPrimaryKey(id);
+        if("00000000".equals(category.getParent())){
+            //如果是一级分类，需要删除其下面的二级分类
+            CategoryExample categoryExample = new CategoryExample();
+            categoryExample.createCriteria().andParentEqualTo(id);
+            categoryMapper.deleteByExample(categoryExample);
+        }
     }
 }
