@@ -1,10 +1,15 @@
 package com.course.business.controller.admin;
 
 import com.course.server.domain.Course;
+import com.course.server.domain.CourseCategory;
+import com.course.server.domain.CourseCategoryExample;
+import com.course.server.dto.CourseCategoryDto;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
+import com.course.server.mapper.CourseCategoryMapper;
 import com.course.server.service.CourseService;
+import com.course.server.util.CopyUtil;
 import com.course.server.util.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +24,8 @@ public class CourseController {
 
     @Resource
     private CourseService courseService;
+
+
 
     /**
      * 列表查询
@@ -56,6 +63,19 @@ public class CourseController {
     public ResponseDto delete(@PathVariable String id){
         ResponseDto responseDto = new ResponseDto();
         courseService.delete(id);
+        return responseDto;
+    }
+
+    /**
+     * 查询课程下所有分类
+     * @param courseId
+     * @return
+     */
+    @PostMapping("/list-category/{courseId}")
+    public ResponseDto listByCourse(@PathVariable(value = "courseId") String courseId){
+        ResponseDto responseDto = new ResponseDto();
+        List<CourseCategoryDto> dtoList = courseService.listByCourse(courseId);
+        responseDto.setContent(dtoList);
         return responseDto;
     }
 }

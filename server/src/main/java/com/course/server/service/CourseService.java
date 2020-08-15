@@ -1,9 +1,13 @@
 package com.course.server.service;
 
 import com.course.server.domain.Course;
+import com.course.server.domain.CourseCategory;
+import com.course.server.domain.CourseCategoryExample;
 import com.course.server.domain.CourseExample;
+import com.course.server.dto.CourseCategoryDto;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
+import com.course.server.mapper.CourseCategoryMapper;
 import com.course.server.mapper.CourseMapper;
 import com.course.server.mapper.my.MyCourseMapper;
 import com.course.server.util.CopyUtil;
@@ -11,6 +15,7 @@ import com.course.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -29,6 +34,9 @@ public class CourseService {
     @Resource
     private CourseCategoryService courseCategoryService;
 
+    @Resource
+    private CourseCategoryMapper courseCategoryMapper;
+
     /**
      * 列表查询
      */
@@ -46,6 +54,7 @@ public class CourseService {
     /**
      * 保存，id有值时更新，无值时新增
      */
+    @Transactional
     public void save(CourseDto courseDto) {
         Course course = CopyUtil.copy(courseDto, Course.class);
         if (StringUtils.isEmpty(courseDto.getId())) {
@@ -89,5 +98,17 @@ public class CourseService {
      */
     public void updateTime(String courseId){
         myCourseMapper.updateTime(courseId);
+    }
+
+    /**
+     * 查询课程下所有分类
+     * @param courseId
+     * @return
+     */
+    public List<CourseCategoryDto> listByCourse(String courseId){
+        CourseCategoryExample courseCategoryExample = new CourseCategoryExample();
+        courseCategoryExample.createCriteria().andCourseIdEqualTo(courseId);
+        List<CourseCategory> courseCategories = courseCategoryMapper.selectByExample(courseCategoryExample);
+        return CopyUtil.copyList(courseCategories,CourseCategoryDto.class);
     }
 }

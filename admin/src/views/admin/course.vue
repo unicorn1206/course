@@ -219,6 +219,7 @@
             add(){
                 let _this = this;
                 _this.course = {};
+                _this.tree.checkAllNodes(false);
                 $('#form-modal').modal('show');
             },
             /**
@@ -230,6 +231,7 @@
                 // _this.course = course;
                 //取消数据双向绑定，在编辑框输入值，不影响列表内的值
                 _this.course = $.extend({},course);//将course对象复制到一个空对象{}
+                _this.listCategory(course.id);
                 $('#form-modal').modal('show');
             },
 
@@ -316,6 +318,22 @@
                 SessionStorage.set("course",course);
                 _this.$router.push("/business/chapter");
             },
+
+            listCategory(courseId){
+                let _this = this;
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/admin/course/list-category/' + courseId
+                ).then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    let categorys = resp.content;
+                    _this.tree.checkAllNodes(false);
+                    for(let i = 0;i< categorys.length;i++){
+                        let node = _this.tree.getNodeByParam("id",categorys[i].categoryId);
+                        _this.tree.checkNode(node,true);
+                    }
+                })
+            }
   }
 }
 </script>

@@ -11,6 +11,7 @@ import com.course.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -69,7 +70,7 @@ public class CourseCategoryService {
         courseCategoryMapper.deleteByPrimaryKey(id);
     }
 
-
+    @Transactional
     public void saveBatch(String courseId,List<CategoryDto> dtoList){
         //兼容更新数据的情况，对原有分类进行删除
         CourseCategoryExample courseCategoryExample = new CourseCategoryExample();
