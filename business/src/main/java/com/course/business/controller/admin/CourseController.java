@@ -3,10 +3,8 @@ package com.course.business.controller.admin;
 import com.course.server.domain.Course;
 import com.course.server.domain.CourseCategory;
 import com.course.server.domain.CourseCategoryExample;
-import com.course.server.dto.CourseCategoryDto;
-import com.course.server.dto.CourseDto;
-import com.course.server.dto.PageDto;
-import com.course.server.dto.ResponseDto;
+import com.course.server.domain.CourseContent;
+import com.course.server.dto.*;
 import com.course.server.mapper.CourseCategoryMapper;
 import com.course.server.service.CourseService;
 import com.course.server.util.CopyUtil;
@@ -76,6 +74,21 @@ public class CourseController {
         ResponseDto responseDto = new ResponseDto();
         List<CourseCategoryDto> dtoList = courseService.listByCourse(courseId);
         responseDto.setContent(dtoList);
+        return responseDto;
+    }
+
+    @GetMapping("/find-content/{id}")
+    public ResponseDto findContent(@PathVariable String id){
+        ResponseDto responseDto = new ResponseDto();
+        CourseContentDto courseContentDto = courseService.findContent(id);
+        responseDto.setContent(courseContentDto);
+        return responseDto;
+    }
+
+    @PostMapping("/save-content")
+    public ResponseDto saveContent(@RequestBody CourseContentDto courseContentDto){
+        ResponseDto responseDto = new ResponseDto();
+        courseService.saveContent(courseContentDto);
         return responseDto;
     }
 }

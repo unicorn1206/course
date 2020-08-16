@@ -108,6 +108,30 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
+        <div id="course-content-modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">内容编辑</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <div id="content"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" v-on:click="saveContent()">保存</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
         <div class="row">
             <div class="col-md-4" v-for="course in courses" v-bind:key="course.id">
                 <div class="thumbnail search-thumbnail">
@@ -139,6 +163,9 @@
                         <p>
                             <button v-on:click="toChapter(course)" class="btn btn-white btn-xs btn-info btn-round">
                                 大章
+                            </button>&nbsp;
+                            <button v-on:click="editContent(course)" class="btn btn-white btn-xs btn-info btn-round">
+                                内容
                             </button>&nbsp;
                             <button v-on:click="edit(course)" class="btn btn-white btn-xs btn-info btn-round">
                                 编辑
@@ -331,6 +358,55 @@
                     for(let i = 0;i< categorys.length;i++){
                         let node = _this.tree.getNodeByParam("id",categorys[i].categoryId);
                         _this.tree.checkNode(node,true);
+                    }
+                })
+            },
+            /**
+             *打开内容编辑框
+             */
+            editContent(course){
+                let _this = this;
+                _this.course = course;
+                let id = course.id;
+
+                $('#content').summernote({
+                    height: 300,                 // set editor height
+                    focus: true                  // set focus to editable area after initializing summernote
+                });
+                //现清空历史内容
+                $('#content').summernote('code','');
+                Loading.show();
+                _this.$ajax.get(process.env.VUE_APP_SERVER +  '/business/admin/course/find-content/' + id
+                ).then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    if(resp.success){
+                        $('#course-content-modal').modal({backdrop:'static',keyboard:'false'});//backdrop:'static'点击空白位置模态框不会自动关闭
+                        if(resp.content){
+                            $('#content').summernote('code',resp.content.content);
+                        }
+                    }else{
+                        Toast.warning(resp.message);
+                    }
+                })
+            },
+            /**
+             *保存内容
+             */
+            saveContent(){
+                let _this = this;
+                let content = $('#content').summernote('code');
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/admin/course/save-content/' ,{
+                    id:_this.course.id,
+                    content:content
+            }).then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    if(resp.success){
+                        Toast.success("内容保存成功");
+                    }else{
+                        Toast.warning(resp.message);
                     }
                 })
             }

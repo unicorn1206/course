@@ -1,13 +1,12 @@
 package com.course.server.service;
 
-import com.course.server.domain.Course;
-import com.course.server.domain.CourseCategory;
-import com.course.server.domain.CourseCategoryExample;
-import com.course.server.domain.CourseExample;
+import com.course.server.domain.*;
 import com.course.server.dto.CourseCategoryDto;
+import com.course.server.dto.CourseContentDto;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
 import com.course.server.mapper.CourseCategoryMapper;
+import com.course.server.mapper.CourseContentMapper;
 import com.course.server.mapper.CourseMapper;
 import com.course.server.mapper.my.MyCourseMapper;
 import com.course.server.util.CopyUtil;
@@ -36,6 +35,9 @@ public class CourseService {
 
     @Resource
     private CourseCategoryMapper courseCategoryMapper;
+
+    @Resource
+    private CourseContentMapper courseContentMapper;
 
     /**
      * 列表查询
@@ -110,5 +112,32 @@ public class CourseService {
         courseCategoryExample.createCriteria().andCourseIdEqualTo(courseId);
         List<CourseCategory> courseCategories = courseCategoryMapper.selectByExample(courseCategoryExample);
         return CopyUtil.copyList(courseCategories,CourseCategoryDto.class);
+    }
+
+    /**
+     * 查找课程内容
+     * @param id
+     * @return
+     */
+    public CourseContentDto findContent(String id){
+        CourseContent courseContent = courseContentMapper.selectByPrimaryKey(id);
+        if(courseContent == null){
+            return null;
+        }
+        return CopyUtil.copy(courseContent,CourseContentDto.class);
+    }
+
+    /**
+     * 保存课程内容，包含新增和修改
+     * @param courseContentDto
+     * @return
+     */
+    public int saveContent(CourseContentDto courseContentDto){
+        CourseContent courseContent = CopyUtil.copy(courseContentDto,CourseContent.class);
+        int i = courseContentMapper.updateByPrimaryKeyWithBLOBs(courseContent);
+        if(i == 0){
+            courseContentMapper.insert(courseContent);
+        }
+        return i;
     }
 }
