@@ -9,6 +9,8 @@ import com.course.server.mapper.CourseCategoryMapper;
 import com.course.server.service.CourseService;
 import com.course.server.util.CopyUtil;
 import com.course.server.util.ValidatorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -17,6 +19,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/course")//访问地址与包名对应
 public class CourseController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CourseController.class);
 
     public static final String BUSINESS_NAME = "课程";
 
@@ -89,6 +93,14 @@ public class CourseController {
     public ResponseDto saveContent(@RequestBody CourseContentDto courseContentDto){
         ResponseDto responseDto = new ResponseDto();
         courseService.saveContent(courseContentDto);
+        return responseDto;
+    }
+
+    @RequestMapping("/sort")
+    public ResponseDto sort(@RequestBody SortDto sortDto){
+        LOG.info("更新排序");
+        ResponseDto responseDto = new ResponseDto();
+        courseService.sort(sortDto);
         return responseDto;
     }
 }
