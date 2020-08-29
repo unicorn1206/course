@@ -143,7 +143,7 @@
             }
         },
         mounted:function () {
-            //this.$parent.activeSideBar("business-chapter-sidebar");
+            this.$parent.activeSideBar("business-course-sidebar");
             let _this = this;
             _this.$refs.pagination.size=5;
             let course = SessionStorage.get("course") || {};
