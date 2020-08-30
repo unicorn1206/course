@@ -14,19 +14,20 @@
 
         <!--ref属性：组件别名,v-bind,绑定一个方法，左边list为子组件内部定义，暴露给外部的一个回调方法
         ，右边list是当前组件的list方法，作用：点击按钮的时候要执行什么方法-->
-<!--        <pagination ref="pagination" v-bind:list="list"></pagination>-->
+        <!--        <pagination ref="pagination" v-bind:list="list"></pagination>-->
         <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="6"></pagination>
 
         <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title">表单</h4>
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal">
-                                                        <div class="form-group">
+                            <div class="form-group">
                                 <label class="col-sm-2 control-label">姓名</label>
                                 <div class="col-sm-10">
                                     <input v-model="teacher.name" class="form-control">
@@ -59,7 +60,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">简介</label>
                                 <div class="col-sm-10">
-                                    <input v-model="teacher.intro" class="form-control">
+                                    <textarea v-model="teacher.intro" class="form-control" rows="5"></textarea>
                                 </div>
                             </div>
                         </form>
@@ -71,106 +72,85 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 center" v-for="teacher in teachers" v-bind:key="teacher.id">
+                <div>
+                <span class="profile-picture">
+                    <img v-show="!teacher.image" class="editable img-responsive editable-click editable-empty"
+                         v-bind:title="teacher.intro" src="/static/image/讲师头像/头像2.jpg"/>
+                    <img v-show="teacher.image" class="editable img-responsive editable-click editable-empty"
+                         v-bind:title="teacher.intro" v-bind:src="teacher.image"/>
+                </span>
 
-        <table id="simple-table" class="table  table-bordered table-hover">
-                    <thead>
-                    <tr>
-                            <th>id</th>
-                            <th>姓名</th>
-                            <th>昵称</th>
-                            <th>头像</th>
-                            <th>职位</th>
-                            <th>座右铭</th>
-                            <th>简介</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
+                    <div class="space-4"></div>
 
-                    <tbody>
-                    <tr v-for="teacher in teachers" v-bind:key="teacher.id">
-                        <td>{{teacher.id}}</td>
-                        <td>{{teacher.name}}</td>
-                        <td>{{teacher.nickname}}</td>
-                        <td>{{teacher.image}}</td>
-                        <td>{{teacher.position}}</td>
-                        <td>{{teacher.motto}}</td>
-                        <td>{{teacher.intro}}</td>
-                        <td>
-                            <div class="hidden-sm hidden-xs btn-group">
+                    <div class="width-85 label label-info label-xlg arrowed-in arrowed-in-right">
+                        <div class="inline position-relative">
+                            <a href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                                <i class="ace-icon fa fa-circle light-green"></i>
+                                &nbsp;
+                                <span class="white">{{teacher.position}}</span>
+                            </a>
 
-                                <button v-on:click="edit(teacher)" class="btn btn-xs btn-info">
-                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                </button>
+                        </div>
+                    </div>
+                </div>
 
-                                <button v-on:click="del(teacher.id)" class="btn btn-xs btn-danger">
-                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                </button>
-                            </div>
+                <div class="space-6"></div>
 
-                            <div class="hidden-md hidden-lg">
-                                <div class="inline pos-rel">
-                                    <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                        <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                                    </button>
+                <div class="text-center">
+                    <a href="javascript:;" class="text-info bigger-110" v-bind:title="teacher.motto">
+                        <i class="ace-icon fa fa-user"></i>
+                        {{teacher.name}}【{{teacher.nickname}}】
+                    </a>
+                </div>
 
-                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                        <li>
-                                            <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-                                                                                <span class="blue">
-                                                                                    <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                                                                                </span>
-                                            </a>
-                                        </li>
+                <div class="space-6"></div>
 
-                                        <li>
-                                            <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-                                                                                <span class="green">
-                                                                                    <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-                                                                                </span>
-                                            </a>
-                                        </li>
+                <div class="profile-social-links align-center">
+                    <button v-on:click="edit(teacher)" class="btn btn-xs btn-info">
+                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                    </button>
+                    &nbsp;
+                    <button v-on:click="del(teacher.id)" class="btn btn-xs btn-danger">
+                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                    </button>
+                </div>
 
-                                        <li>
-                                            <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                                                                <span class="red">
-                                                                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                                </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="hr hr16 dotted"></div>
+
+            </div>
+
+        </div>
     </div>
+
+
 </template>
 
 <script>
     import Pagination from '../../components/pagination'//引入子组件2-1
     export default {
-        components:{Pagination},//引入子组件2-2
+        components: {Pagination},//引入子组件2-2
         name: "business-teacher",
-        data:function(){
-            return{
-                teacher:{},//新增时，弹出框的值
+        data: function () {
+            return {
+                teacher: {},//新增时，弹出框的值
                 // courseId:"",
                 // name:'',
-                teachers:[],//列表展示
+                teachers: [],//列表展示
             }
         },
-        mounted:function () {
+        mounted: function () {
             //this.$parent.activeSideBar("business-teacher-sidebar");
             let _this = this;
-            _this.$refs.pagination.size=5;
+            _this.$refs.pagination.size = 5;
             _this.list(1);
         },
-        methods:{
+        methods: {
             /**
              * 点击【新增】
              */
-            add(){
+            add() {
                 let _this = this;
                 _this.teacher = {};
                 $('#form-modal').modal('show');
@@ -178,36 +158,36 @@
             /**
              * 点击【编辑】
              */
-            edit(teacher){
+            edit(teacher) {
                 let _this = this;
                 //数据双向绑定
                 // _this.teacher = teacher;
                 //取消数据双向绑定，在编辑框输入值，不影响列表内的值
-                _this.teacher = $.extend({},teacher);//将teacher对象复制到一个空对象{}
+                _this.teacher = $.extend({}, teacher);//将teacher对象复制到一个空对象{}
                 $('#form-modal').modal('show');
             },
 
             /**
              * 列表查询
              */
-            list(page){
+            list(page) {
                 let _this = this;
                 Loading.show();
-                _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/admin/teacher/list',{
-                    page:page,
-                    size:_this.$refs.pagination.size//获取组件内部的size变量
-                }).then((response)=>{
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/teacher/list', {
+                    page: page,
+                    size: _this.$refs.pagination.size//获取组件内部的size变量
+                }).then((response) => {
                     Loading.hide();
                     let resp = response.data;
                     _this.teachers = resp.content.list;
-                    _this.$refs.pagination.render(page,resp.content.total);//重新渲染当前组件，所选页数的底色
+                    _this.$refs.pagination.render(page, resp.content.total);//重新渲染当前组件，所选页数的底色
                 })
             },
 
             /**
              * 点击【保存】
              */
-            save(){
+            save() {
                 let _this = this;
                 // let teacher ={
                 //     couseId:this.courseId,
@@ -225,41 +205,41 @@
                 ) {
                     return;
                 }
-          Loading.show();
-          _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/admin/teacher/save', _this.teacher
-          ).then((response)=>{
-              Loading.hide();
-              let resp = response.data;
-              if(resp.success){
-                  $('#form-modal').modal('hide');
-                  _this.list(1);
-                  Toast.success('保存成功');
-              }else{
-                  Toast.warning(resp.message);
-              }
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/teacher/save', _this.teacher
+                ).then((response) => {
+                    Loading.hide();
+                    let resp = response.data;
+                    if (resp.success) {
+                        $('#form-modal').modal('hide');
+                        _this.list(1);
+                        Toast.success('保存成功');
+                    } else {
+                        Toast.warning(resp.message);
+                    }
 
-          })
-      },
-      /**
-       * 点击【删除】
-       */
-      del(id){
-          let _this = this;
-          Confirm.show("删除讲师后不可恢复，确认删除？",function () {
-              Loading.show();
-              _this.$ajax.delete(process.env.VUE_APP_SERVER +  '/business/admin/teacher/delete/' + id
-              ).then((response)=>{
-                  Loading.hide();
-                  let resp = response.data;
-                  if(resp.success){
-                      _this.list(1);
-                      Toast.success('删除成功');
-                  }
-              })
-          });
+                })
+            },
+            /**
+             * 点击【删除】
+             */
+            del(id) {
+                let _this = this;
+                Confirm.show("删除讲师后不可恢复，确认删除？", function () {
+                    Loading.show();
+                    _this.$ajax.delete(process.env.VUE_APP_SERVER + '/business/admin/teacher/delete/' + id
+                    ).then((response) => {
+                        Loading.hide();
+                        let resp = response.data;
+                        if (resp.success) {
+                            _this.list(1);
+                            Toast.success('删除成功');
+                        }
+                    })
+                });
 
-      }
-  }
-}
+            }
+        }
+    }
 </script>
 
