@@ -77,6 +77,16 @@ public class CourseDto {
 
     private List<CategoryDto> categorys;
 
+    public String getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    private String teacherId;
+
     public List<CategoryDto> getCategorys() {
         return categorys;
     }
@@ -207,8 +217,8 @@ public class CourseDto {
         sb.append(", createAt=").append(createAt);
         sb.append(", updateAt=").append(updateAt);
         sb.append(", categorys=").append(categorys);
+        sb.append(", teacherId='").append(teacherId).append('\'');
         sb.append('}');
         return sb.toString();
     }
-
 }

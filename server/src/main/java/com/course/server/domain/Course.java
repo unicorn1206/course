@@ -30,6 +30,8 @@ public class Course {
 
     private Date updateAt;
 
+    private String teacherId;
+
     public String getId() {
         return id;
     }
@@ -134,6 +136,14 @@ public class Course {
         this.updateAt = updateAt;
     }
 
+    public String getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -153,6 +163,7 @@ public class Course {
         sb.append(", sort=").append(sort);
         sb.append(", createAt=").append(createAt);
         sb.append(", updateAt=").append(updateAt);
+        sb.append(", teacherId=").append(teacherId);
         sb.append("]");
         return sb.toString();
     }

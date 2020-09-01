@@ -40,6 +40,16 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-sm-2 control-label">讲师</label>
+                                <div class="col-sm-10">
+                                    <select v-model="course.teacherId" class="form-control">
+                                        <option v-for="o in teachers" v-bind:key="o.id" v-bind:value="o.id">
+                                            {{o.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-sm-2 control-label">概述</label>
                                 <div class="col-sm-10">
                                     <input v-model="course.summary" class="form-control">
@@ -251,7 +261,8 @@
                     id: "",
                     oldSort: 0,
                     newSort: 0
-                }
+                },
+                teachers:[]
             }
         },
         mounted: function () {
@@ -260,6 +271,7 @@
             _this.$refs.pagination.size = 5;
             _this.list(1);
             _this.allCategory();
+            _this.allTeachers();
         },
         methods: {
             /**
@@ -273,6 +285,15 @@
                     let resp = response.data;
                     _this.categorys = resp.content;
                     _this.initTree();
+                })
+            },
+            allTeachers() {
+                let _this = this;
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/teacher/all').then((response) => {
+                    Loading.hide();
+                    let resp = response.data;
+                    _this.teachers = resp.content;
                 })
             },
             initTree() {
