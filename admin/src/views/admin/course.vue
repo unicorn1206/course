@@ -208,6 +208,17 @@
                         <h3 class="search-title">
                             <a href="#" class="blue">{{course.name}}</a>
                         </h3>
+
+                        <div class="profile-activity clearfix" v-for="teacher in teachers.filter(t=>{return t.id == course.teacherId})" v-bind:key="teacher.id">
+                            <div>
+                                <img v-show="!teacher.image" class="pull-left" src="/static/image/讲师头像/头像2.jpg"/>
+                                <img v-show="teacher.image" class="pull-left" v-bind:src="teacher.image"/>
+                                <a class="user" href="#"> {{teacher.name}} </a>
+                                <br>
+                                {{teacher.position}}
+                            </div>
+                        </div>
+
                         <p class="blue bolder bigger-150">{{course.price}}&nbsp;<i class="fa fa-rmb"></i></p>
                         <p>{{course.summary}}</p>
                         <p>
@@ -548,5 +559,11 @@
     /*scoped:样式只作用于当前组件，防止互相渲染*/
     .caption h3 {
         font-size: 20px;
+    }
+
+    @media (max-width: 1199px) {
+        .caption h3 {
+            font-size: 16px;
+        }
     }
 </style>
