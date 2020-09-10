@@ -13,7 +13,7 @@ import org.dom4j.io.SAXReader;
 
 public class ServerGenerator {
 
-    static String MODULE = "business";
+    static String MODULE = "file";
     static String toServicePath = "server//src//main//java//com//course//server//service//";
     static String toControllerPath = MODULE + "//src//main//java//com//course//" + MODULE + "//controller//admin//";
     static String toDtoPath = "server//src//main//java//com//course//server//dto//";
