@@ -54,7 +54,7 @@ public class UploadController {
 
         //如果文件夹不存在则创建
         String dir = useEnum.name().toLowerCase() + "Pic";
-        File fullDir = new File(FILE_PATH + dir + "Pic");
+        File fullDir = new File(FILE_PATH + dir);
         if(!fullDir.exists()){
             fullDir.mkdir();
         }

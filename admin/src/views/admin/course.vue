@@ -34,6 +34,21 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-sm-2 control-label">封面</label>
+                                <div class="col-sm-10">
+                                    <file v-bind:text="'上传封面'"
+                                          v-bind:input-id="'image-upload'"
+                                          v-bind:suffixs="['jpg','jpeg','png']"
+                                          v-bind:use="FILE_USE.COURSE.key"
+                                          v-bind:after-upload="afterUpload"></file>
+                                    <div v-show="course.image" class="row">
+                                        <div class="col-md-6">
+                                            <img v-bind:src="course.image" class="img-responsive"/><!--class设置图片为响应式-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-sm-2 control-label">名称</label>
                                 <div class="col-sm-10">
                                     <input v-model="course.name" class="form-control">
@@ -65,12 +80,6 @@
                                 <label class="col-sm-2 control-label">价格（元）</label>
                                 <div class="col-sm-10">
                                     <input v-model="course.price" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">封面</label>
-                                <div class="col-sm-10">
-                                    <input v-model="course.image" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -253,8 +262,9 @@
 
 <script>
     import Pagination from '../../components/pagination'//引入子组件2-1
+    import File from '../../components/file'
     export default {
-        components: {Pagination},//引入子组件2-2
+        components: {Pagination,File},//引入子组件2-2
         name: "business-course",
         data: function () {
             return {
@@ -265,6 +275,7 @@
                 COURSE_LEVEL: COURSE_LEVEL,
                 COURSE_CHARGE: COURSE_CHARGE,
                 COURSE_STATUS: COURSE_STATUS,
+                FILE_USE: FILE_USE,
                 categorys: [],
                 tree: {},
                 saveContentLabel: "",
@@ -550,6 +561,11 @@
                         Toast.warning(resp.message);
                     }
                 })
+            },
+            afterUpload(resp){
+                let _this = this;
+                let image = resp.content.path;
+                _this.course.image = image;///Users/stephanie/IdeaProjects/course
             }
         }
     }
