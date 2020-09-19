@@ -3,6 +3,7 @@ package com.course.file.controller.admin;
 import com.course.server.domain.Test;
 import com.course.server.dto.FileDto;
 import com.course.server.dto.ResponseDto;
+import com.course.server.enums.FileUseEnum;
 import com.course.server.service.FileService;
 import com.course.server.service.TestService;
 import com.course.server.util.UuidUtil;
@@ -40,16 +41,24 @@ public class UploadController {
     private FileService fileService;
 
     @RequestMapping("/upload")
-    public ResponseDto test(@RequestParam MultipartFile file) throws IOException {
-        LOG.info("上传文件开始:{}",file);
+    public ResponseDto test(@RequestParam MultipartFile file,String use) throws IOException {
+        LOG.info("上传文件开始");
         LOG.info(file.getOriginalFilename());
         LOG.info(String.valueOf(file.getSize()));
 
         //保存文件到本地
+        FileUseEnum useEnum = FileUseEnum.getByCode(use);//useEnum为一整个枚举类型：TEACHER("T", "讲师")
         String fileName = file.getOriginalFilename();
         String key = UuidUtil.getShortUuid();
         String suffix = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-        String path = "teacherPic/"+ key + "." + suffix;
+
+        //如果文件夹不存在则创建
+        String dir = useEnum.name().toLowerCase() + "Pic";
+        File fullDir = new File(FILE_PATH + dir + "Pic");
+        if(!fullDir.exists()){
+            fullDir.mkdir();
+        }
+        String path = dir + File.separator + key + "." + suffix;
         String fullPath = FILE_PATH + path;
         File dest = new File(fullPath);
         file.transferTo(dest);
@@ -61,7 +70,7 @@ public class UploadController {
         fileDto.setName(fileName);
         fileDto.setSize(Math.toIntExact(file.getSize()));
         fileDto.setSuffix(suffix);
-        fileDto.setUse("");
+        fileDto.setUse(use);
         fileService.save(fileDto);
 
         ResponseDto responseDto = new ResponseDto();

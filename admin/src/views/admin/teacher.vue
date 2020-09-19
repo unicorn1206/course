@@ -45,6 +45,7 @@
                                     <file v-bind:text="'上传头像'"
                                           v-bind:input-id="'image-upload'"
                                           v-bind:suffixs="['jpg','jpeg','png']"
+                                          v-bind:use="FILE_USE.TEACHER.key"
                                           v-bind:after-upload="afterUpload"></file>
                                     <div v-show="teacher.image" class="row">
                                         <div class="col-md-4">
@@ -147,6 +148,7 @@
                 // courseId:"",
                 // name:'',
                 teachers: [],//列表展示
+                FILE_USE: FILE_USE,
             }
         },
         mounted: function () {
