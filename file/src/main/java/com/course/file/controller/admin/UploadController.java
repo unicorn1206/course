@@ -41,16 +41,14 @@ public class UploadController {
     private FileService fileService;
 
     @RequestMapping("/upload")
-    public ResponseDto test(@RequestParam MultipartFile file,String use) throws IOException {
+    public ResponseDto test(@RequestParam MultipartFile shard,
+                            String use,String name,String suffix,
+                            Integer size,Integer shardSize,Integer shardIndex,Integer shardTotal) throws IOException {
         LOG.info("上传文件开始");
-        LOG.info(file.getOriginalFilename());
-        LOG.info(String.valueOf(file.getSize()));
 
         //保存文件到本地
         FileUseEnum useEnum = FileUseEnum.getByCode(use);//useEnum为一整个枚举类型：TEACHER("T", "讲师")
-        String fileName = file.getOriginalFilename();
         String key = UuidUtil.getShortUuid();
-        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
 
         //如果文件夹不存在则创建
         String dir = useEnum.name().toLowerCase() + "Pic";
@@ -61,16 +59,20 @@ public class UploadController {
         String path = dir + File.separator + key + "." + suffix;
         String fullPath = FILE_PATH + path;
         File dest = new File(fullPath);
-        file.transferTo(dest);
+        shard.transferTo(dest);
         LOG.info(dest.getAbsolutePath());
 
         LOG.info("保存文件记录开始");
         FileDto fileDto = new FileDto();
         fileDto.setPath(path);
-        fileDto.setName(fileName);
-        fileDto.setSize(Math.toIntExact(file.getSize()));
+        fileDto.setName(name);
+        fileDto.setSize(size);
         fileDto.setSuffix(suffix);
         fileDto.setUse(use);
+        fileDto.setShardIndex(shardIndex);
+        fileDto.setShardSize(shardSize);
+        fileDto.setShardTotal(shardTotal);
+        fileDto.setKey(key);
         fileService.save(fileDto);
 
         ResponseDto responseDto = new ResponseDto();
