@@ -42,13 +42,12 @@ public class UploadController {
 
     @RequestMapping("/upload")
     public ResponseDto test(@RequestParam MultipartFile shard,
-                            String use,String name,String suffix,
+                            String use,String name,String suffix,String key,
                             Integer size,Integer shardSize,Integer shardIndex,Integer shardTotal) throws IOException {
         LOG.info("上传文件开始");
 
         //保存文件到本地
         FileUseEnum useEnum = FileUseEnum.getByCode(use);//useEnum为一整个枚举类型：TEACHER("T", "讲师")
-        String key = UuidUtil.getShortUuid();
 
         //如果文件夹不存在则创建
         String dir = useEnum.name().toLowerCase() + "Pic";
