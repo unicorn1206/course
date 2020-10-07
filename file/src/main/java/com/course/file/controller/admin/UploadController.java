@@ -39,7 +39,7 @@ public class UploadController {
     private FileService fileService;
 
     @RequestMapping("/upload")
-    public ResponseDto upload(@RequestBody FileDto fileDto) throws IOException {
+    public ResponseDto upload(@RequestBody FileDto fileDto) throws Exception {
         LOG.info("上传文件开始");
         String use = fileDto.getUse();
         String key = fileDto.getKey();
@@ -64,11 +64,16 @@ public class UploadController {
                 .append(suffix)
                 .append(".")
                 .append(fileDto.getShardIndex()).toString();
-        String fullPath = FILE_PATH + path;
+        String localPath = new StringBuffer(path)
+                .append(".")
+                .append(fileDto.getShardIndex()).toString();
+        //写到本地用localPath，XXX.mp4.1
+        String fullPath = FILE_PATH + localPath;
         File dest = new File(fullPath);
         shard.transferTo(dest);
         LOG.info(dest.getAbsolutePath());
 
+        //存入数据库和返回前端用path，XXX.mp4
         LOG.info("保存文件记录开始");
         fileDto.setPath(path);
         fileService.save(fileDto);
@@ -76,28 +81,31 @@ public class UploadController {
         ResponseDto responseDto = new ResponseDto();
         fileDto.setPath(FILE_DOMAIN + path);
         responseDto.setContent(fileDto);
+
+        if(fileDto.getShardIndex() == fileDto.getShardTotal()){
+            this.merge(fileDto);
+        }
         return responseDto;
     }
 
     @GetMapping("/merge")
-    public ResponseDto merger() throws Exception {
-        File newFile = new File(FILE_PATH + "course/test123.mp4");
+    public void merge(FileDto fileDto) throws Exception {
+        LOG.info("合并分片开始");
+        String path = fileDto.getPath();
+        Integer shardTotal = fileDto.getShardTotal();
+        File newFile = new File(FILE_PATH + path);
         FileOutputStream outputStream = new FileOutputStream(newFile,true);//true:文件追加写入
         FileInputStream fileInputStream = null;//分片文件
         byte[] byt = new byte[10 * 1024 * 1024];
         int len;
 
         try{
-            //读取第一个分片
-            fileInputStream = new FileInputStream(new File(FILE_PATH + "course/test123.mp4"));
-            while((len=fileInputStream.read(byt)) != -1){
-                outputStream.write(byt,0,len);
-            }
-
-            //读取第二个分片
-            fileInputStream = new FileInputStream(new File(FILE_PATH + "course/test123.mp4"));
-            while((len=fileInputStream.read(byt)) != -1){
-                outputStream.write(byt,0,len);
+            for (int i = 0;i < shardTotal;i++){
+                //读取第i个分片
+                fileInputStream = new FileInputStream(new File(FILE_PATH + path + "." + (i + 1)));
+                while((len=fileInputStream.read(byt)) != -1){
+                    outputStream.write(byt,0,len);
+                }
             }
         }catch (Exception e){
             LOG.error("文件合并异常",e);
@@ -112,7 +120,6 @@ public class UploadController {
                 LOG.error("IO流关闭",e);
             }
         }
-        ResponseDto responseDto = new ResponseDto();
-        return responseDto;
+        LOG.info("合并分片结束");
     }
 }
