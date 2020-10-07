@@ -153,22 +153,26 @@
                 let fileshard = _this.getFileShard(shardIndex, shardSize);
                 //将图片转换为base64进行传输
                 let fileReader = new FileReader();
+
+                Progress.show(parseInt((shardIndex - 1) * 100 / shardTotal));
                 //监听fileReader.readAsDataURL(fileshard);当执行readAsDataURL，就会触发fileReader.onload，但fileReader.onload写在前面
                 fileReader.onload = function(e){
                     let base64 = e.target.result;
                     param.shard = base64;
                     //console.log("base64",base64);
 
-                    Loading.show();
+                    //Loading.show();
                     _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload/', param
                     ).then((response) => {
-                        Loading.hide();
+                        //Loading.hide();
                         let resp = response.data;
+                        Progress.show(parseInt(shardIndex * 100 / shardTotal));
                         if(shardIndex < shardTotal){
                             //上传下一个分片
                             param.shardIndex = param.shardIndex + 1;
                             _this.upload(param);
                         }else{
+                            Progress.hide();
                             _this.afterUpload(resp);
                             $('#' + _this.inputId + '-input').val("");
                         }
