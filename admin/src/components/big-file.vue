@@ -138,10 +138,11 @@
                             _this.upload(param);
                         }else{
                             _this.afterUpload(resp);
+                            $('#' + _this.inputId + '-input').val("");
                         }
 
                         console.log("上传文件成功", resp);
-                        $('#' + _this.inputId + '-input').val("");
+
                     });
                 };
                 fileReader.readAsDataURL(fileshard);
