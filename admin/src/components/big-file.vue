@@ -88,7 +88,7 @@
                 //监听fileReader.readAsDataURL(fileshard);当执行readAsDataURL，就会触发fileReader.onload，但fileReader.onload写在前面
                 fileReader.onload = function(e){
                     let base64 = e.target.result;
-                    console.log("base64",base64);
+                    //console.log("base64",base64);
 
                     let param = {
                         'shard' : base64,
