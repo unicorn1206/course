@@ -124,6 +124,7 @@ public class UploadController {
 
         //清除对文件的占用，为了删除上传的文件
         System.gc();
+        Thread.sleep(100);
 
         //删除分片
         LOG.info("删除分片开始");
@@ -141,6 +142,9 @@ public class UploadController {
         LOG.info("检查上传文件分片开始:{}",key);
         ResponseDto responseDto = new ResponseDto();
         FileDto fileDto = fileService.findByKey(key);
+        if(fileDto != null){
+            fileDto.setPath(FILE_DOMAIN + fileDto.getPath());
+        }
         responseDto.setContent(fileDto);
         return responseDto;
 

@@ -127,7 +127,11 @@
                             param.shardIndex = 1;
                             console.log("没有找到文件记录，从分片1开始上传");
                             _this.upload(param);
-                        }else{
+                        }else if(obj.shardIndex == obj.shardTotal){
+                            Toast.success("文件极速秒传成功");
+                            _this.afterUpload(resp);
+                            $('#' + _this.inputId + '-input').val("");
+                        } else{
                             param.shardIndex = obj.shardIndex + 1;
                             console.log("找到文件记录，分片从" + param.shardIndex + "开始上传");
                             _this.upload(param);
