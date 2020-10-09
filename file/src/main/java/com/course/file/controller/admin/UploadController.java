@@ -62,8 +62,7 @@ public class UploadController {
                 .append(key)
                 .append(".")
                 .append(suffix)
-                .append(".")
-                .append(fileDto.getShardIndex()).toString();
+                .toString();
         String localPath = new StringBuffer(path)
                 .append(".")
                 .append(fileDto.getShardIndex()).toString();
@@ -92,6 +91,7 @@ public class UploadController {
     public void merge(FileDto fileDto) throws Exception {
         LOG.info("合并分片开始");
         String path = fileDto.getPath();
+        path = path.replace(FILE_DOMAIN, "");
         Integer shardTotal = fileDto.getShardTotal();
         File newFile = new File(FILE_PATH + path);
         FileOutputStream outputStream = new FileOutputStream(newFile,true);//true:文件追加写入

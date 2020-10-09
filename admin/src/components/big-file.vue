@@ -42,7 +42,7 @@
                 let _this = this;
                 let formData = new window.FormData();
                 let file = _this.$refs.file.files[0];
-                console.log(file);
+                console.log(JSON.stringify(file));
 
                 /*
                   name: "test.mp4"
@@ -53,7 +53,7 @@
                   type: "video/mp4"
                 */
                 //生成文件标识，标识多次上传的是不是用一个文件
-                let key = hex_md5(file);
+                let key = hex_md5(file.name + file.size + file.type);
                 let key10 = parseInt(key, 16);
                 let key62 = Tool._10to62(key10);
                 console.log(key, key10, key62);
@@ -91,7 +91,7 @@
                     'key': key62
                 };
 
-                _this.upload(param);
+                _this.check(param);
 
                 //key:file必须和后端controller参数名一致
                 // formData.append('shard', fileshard);
@@ -120,14 +120,14 @@
                 let _this = this;
                 _this.$ajax.get(process.env.VUE_APP_SERVER + '/file/admin/check/'+ param.key
                 ).then((response) => {
-                    let resp = response.data.content;
+                    let resp = response.data;
                     if(resp.success){
                         let obj = resp.content;
                         if(!obj){
                             param.shardIndex = 1;
                             console.log("没有找到文件记录，从分片1开始上传");
                             _this.upload(param);
-                        }else if(obj.shardIndex == obj.shardTotal){
+                        }else if(obj.shardIndex === obj.shardTotal){
                             Toast.success("文件极速秒传成功");
                             _this.afterUpload(resp);
                             $('#' + _this.inputId + '-input').val("");
