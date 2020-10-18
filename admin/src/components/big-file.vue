@@ -74,7 +74,8 @@
                     return;
                 }
                 //文件分片
-                let shardSize = 20 * 1024 * 1024; //以20MB为一个分片
+                //let shardSize = 20 * 1024 * 1024; //以20MB为一个分片
+                let shardSize = 50 * 1024;
                 let shardIndex = 1; //分片索引,1表示第一个分片
 
                 let size = file.size;
@@ -162,7 +163,7 @@
                     //console.log("base64",base64);
 
                     //Loading.show();
-                    _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload/', param
+                    _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/oss-append/', param
                     ).then((response) => {
                         //Loading.hide();
                         let resp = response.data;
