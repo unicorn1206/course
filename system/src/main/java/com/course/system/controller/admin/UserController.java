@@ -6,6 +6,7 @@ import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.service.UserService;
 import com.course.server.util.ValidatorUtil;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -37,6 +38,8 @@ public class UserController {
     @PostMapping("/save")
     public ResponseDto save(@RequestBody UserDto userDto){
         ResponseDto responseDto = new ResponseDto();
+
+        userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()));
 
         // 保存校验
         ValidatorUtil.require(userDto.getLoginName(), "登录名");
