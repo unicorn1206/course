@@ -532,6 +532,9 @@
             $('body').attr('class', 'no-skin');
             let _this = this;
             _this.activeSideBar(_this.$route.name.replace("/", "-") + "-sidebar");
+
+            //重新加载js
+            $.getScript('/ace/assets/js/ace.min.js');
         },
         watch:{
             $route:{
