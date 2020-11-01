@@ -365,7 +365,7 @@
 
                         <b class="arrow"></b>
                     </li>
-                    <li class="active open">
+                    <li class="">
                         <a href="#" class="dropdown-toggle">
                             <i class="menu-icon fa fa-list"></i>
                             <span class="menu-text"> 系统管理 </span>
@@ -376,7 +376,7 @@
                         <b class="arrow"></b>
 
                         <ul class="submenu">
-                            <li class="active" id="system-user-sidebar">
+                            <li class="" id="system-user-sidebar">
                                 <router-link to="/system/user">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     用户管理
@@ -395,7 +395,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="active open">
+                    <li class="">
                         <a href="#" class="dropdown-toggle">
                             <i class="menu-icon fa fa-list"></i>
                             <span class="menu-text"> 业务管理 </span>
@@ -448,7 +448,7 @@
 <!--                            </li>-->
                         </ul>
                     </li>
-                    <li class="active open">
+                    <li class="">
                         <a href="#" class="dropdown-toggle">
                             <i class="menu-icon fa fa-list"></i>
                             <span class="menu-text"> 文件管理 </span>
@@ -555,6 +555,7 @@
                 let parentLi = $("#" + id).parents('li');
                 if(parentLi){
                     parentLi.siblings().removeClass("active open");
+                    parentLi.siblings().find('li').removeClass('active');//父菜单的所有子菜单去掉激活样式
                     parentLi.addClass("active open");
                 }
 
