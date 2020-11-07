@@ -282,10 +282,6 @@
                         <li class="light-blue dropdown-modal">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                                 <img class="nav-user-photo" src="../../public/ace/assets/images/avatars/user.jpg" alt="Jason's Photo" />
-                                <span class="user-info">
-									<small>Welcome,</small>
-									Jason
-								</span>
 
                                 <i class="ace-icon fa fa-caret-down"></i>
                             </a>
@@ -360,7 +356,7 @@
                     <li class="" id="welcome-sidebar">
                         <router-link to="/welcome">
                             <i class="menu-icon fa fa-tachometer"></i>
-                            <span class="menu-text"> 欢迎 </span>
+                            <span class="menu-text"> 欢迎 : {{loginUser.name}}</span>
                         </router-link>
 
                         <b class="arrow"></b>
@@ -527,6 +523,11 @@
 <script>
     export default {
         name: "admin.vue",
+        data:function(){
+            return{
+                loginUser:{}
+            }
+        },
         mounted() {
             $('body').removeClass('login-layout light-login');
             $('body').attr('class', 'no-skin');
@@ -535,6 +536,8 @@
 
             //重新加载js
             $.getScript('/ace/assets/js/ace.min.js');
+
+            _this.loginUser = Tool.getLoginUser();
         },
         watch:{
             $route:{
