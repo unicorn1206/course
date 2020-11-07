@@ -39,10 +39,10 @@
                                     <input v-model="user.name" class="form-control">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div v-show="!user.id" class="form-group">
                                 <label class="col-sm-2 control-label">密码</label>
                                 <div class="col-sm-10">
-                                    <input v-model="user.password" class="form-control">
+                                    <input v-model="user.password" type="password" class="form-control">
                                 </div>
                             </div>
                         </form>
@@ -50,6 +50,31 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                         <button type="button" class="btn btn-primary" v-on:click="save()">保存</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <div id="edit-password-modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">修改密码</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div  class="form-group">
+                                <label class="col-sm-2 control-label">密码</label>
+                                <div class="col-sm-10">
+                                    <input v-model="user.password" type="password" class="form-control">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" v-on:click="savePassword()">保存</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -74,7 +99,9 @@
                         <td>{{user.password}}</td>
                         <td>
                             <div class="hidden-sm hidden-xs btn-group">
-
+                                <button v-on:click="editPassword(user)" class="btn btn-xs btn-info">
+                                    <i class="ace-icon fa fa-key bigger-120"></i>
+                                </button>
                                 <button v-on:click="edit(user)" class="btn btn-xs btn-info">
                                     <i class="ace-icon fa fa-pencil bigger-120"></i>
                                 </button>
@@ -234,7 +261,41 @@
               })
           });
 
-      }
+      },
+            /**
+             * 点击【重置密码】
+             */
+            editPassword(user){
+                let _this = this;
+                //数据双向绑定
+                // _this.user = user;
+                //取消数据双向绑定，在编辑框输入值，不影响列表内的值
+                _this.user = $.extend({},user);//将user对象复制到一个空对象{}
+                console.log('user',_this.user);
+                _this.user.password = null;
+                $('#edit-password-modal').modal('show');
+            },
+            /**
+             * 点击【保存】
+             */
+            savePassword(){
+                let _this = this;
+                _this.user.password = hex_md5(_this.user.password + KEY);
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER +  '/system/admin/user/save-password', _this.user
+                ).then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    if(resp.success){
+                        $('#edit-password-modal').modal('hide');
+                        _this.list(1);
+                        Toast.success('保存成功');
+                    }else{
+                        Toast.warning(resp.message);
+                    }
+
+                })
+            }
   }
 }
 </script>
