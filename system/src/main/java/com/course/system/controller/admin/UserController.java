@@ -1,16 +1,15 @@
 package com.course.system.controller.admin;
 
 import com.course.server.domain.User;
-import com.course.server.dto.LoginUserDto;
-import com.course.server.dto.UserDto;
-import com.course.server.dto.PageDto;
-import com.course.server.dto.ResponseDto;
+import com.course.server.dto.*;
 import com.course.server.service.UserService;
 import com.course.server.util.ValidatorUtil;
+import org.springframework.http.HttpRequest;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -79,12 +78,23 @@ public class UserController {
      * 登录
      */
     @PostMapping("/login")
-    public ResponseDto login(@RequestBody UserDto userDto){
+    public ResponseDto login(@RequestBody UserDto userDto, HttpServletRequest request){
         ResponseDto responseDto = new ResponseDto();
         userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()));
         LoginUserDto loginUserDto = userService.login(userDto);
+        request.getSession().setAttribute(Constants.LOGIN_USER,loginUserDto);
         responseDto.setContent(loginUserDto);
         return responseDto;
     }
 
+    /**
+     * 退出登录
+     */
+    @GetMapping("/logout")
+    public ResponseDto logout(HttpServletRequest request){
+        ResponseDto responseDto = new ResponseDto();
+        //request.getSession().setAttribute(Constants.LOGIN_USER,null);等同于下一行代码
+        request.getSession().removeAttribute(Constants.LOGIN_USER);
+        return responseDto;
+    }
 }

@@ -132,7 +132,6 @@ public class UserService {
                 throw new BusinessException(BusinessExceptionCode.LOGIN_ERROR);
             }
         }
-
     }
 
 }
