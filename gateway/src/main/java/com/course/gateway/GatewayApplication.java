@@ -36,7 +36,7 @@ public class GatewayApplication {
 
 		config.setAllowCredentials(Boolean.TRUE);
 		config.addAllowedMethod("*");
-		config.addAllowedOrigin("*");
+		config.addAllowedOrigin("http://localhost:8080");
 		config.addAllowedHeader("*");
 		config.setMaxAge(3600L);
 
