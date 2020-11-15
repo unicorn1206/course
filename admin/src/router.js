@@ -30,6 +30,9 @@ export default new Router({
         path:'/',
         name:'admin',
         component:Admin,
+        meta:{
+            loginRequire:true
+        },
         children:[{
             path:'welcome',//子路由前面无"/"
             name:'welcome',

@@ -40,3 +40,20 @@ new Vue({
 }).$mount('#app')
 
 console.log("环境:" + process.env.NODE_ENV);
+
+//路由登录拦截
+router.beforeEach((to,from,next) => {
+  //要不要对meta.loginRequire属性做登录拦截
+  if(to.matched.some(function (item){
+    return item.meta.loginRequire;
+  })){
+    let loginUser = Tool.getLoginUser();
+    if(Tool.isEmpty(loginUser)){
+      next("/login");
+    }else{
+      next();
+    }
+  }else{
+    next();
+  }
+});
