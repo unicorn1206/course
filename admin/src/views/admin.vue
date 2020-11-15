@@ -569,7 +569,7 @@
             logout(){
                 let _this = this;
                 Loading.show();
-                _this.$ajax.get(process.env.VUE_APP_SERVER +  '/system/admin/user/logout',
+                _this.$ajax.get(process.env.VUE_APP_SERVER +  '/system/admin/user/logout/' + _this.loginUser.token,
                 ).then((response)=>{
                     Loading.hide();
                     let resp = response.data;

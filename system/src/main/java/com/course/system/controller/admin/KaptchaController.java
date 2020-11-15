@@ -26,6 +26,8 @@ public class KaptchaController {
 
     private static final Logger LOG = LoggerFactory.getLogger(KaptchaController.class);
 
+    public static final String BUSINESS_NAME = "图片验证码";
+
     @Qualifier("getDefaultKaptcha")
     @Autowired
     DefaultKaptcha defaultKaptcha;
