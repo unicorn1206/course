@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import sun.util.locale.provider.LocaleServiceProviderPool;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,27 +48,32 @@ public class ResourceService {
      */
     public void saveJson(String json) {
         List<ResourceDto> jsonList = JSON.parseArray(json, ResourceDto.class);
+        List<ResourceDto> list = new ArrayList<ResourceDto>();
         if(!CollectionUtils.isEmpty(jsonList)){
             for(ResourceDto d : jsonList){
                 d.setParent("");
-                add(jsonList,d);
+                add(list,d);
             }
         }
         LOG.info("共{}条",jsonList.size());
+        resourceMapper.deleteByExample(null);
+        for(ResourceDto l : list){
+            this.insert(CopyUtil.copy(l,Resource.class));
+        }
 
     }
 
     /**
      * 递归，将树形结构的节点全部取出来，放到list
-     * @param jsonList
+     * @param list
      * @param dto
      */
-    public void add(List<ResourceDto> jsonList,ResourceDto dto){
-        jsonList.add(dto);
+    public void add(List<ResourceDto> list,ResourceDto dto){
+        list.add(dto);
         if(!CollectionUtils.isEmpty(dto.getChildren())){
             for(ResourceDto d : dto.getChildren()){
                 d.setParent(dto.getId());
-                add(jsonList,d);
+                add(list,d);
             }
         }
     }
