@@ -63,7 +63,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary" v-on:click="save()">保存</button>
+                        <button type="button" class="btn btn-primary" v-on:click="saveResource()">保存</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -298,7 +298,40 @@
               })
           });
 
-      }
+      },
+            /**
+             * 资源模态框，点击【保存】
+             */
+            saveResource(){
+                let _this = this;
+                let resources = _this.tree.getCheckedNodes();
+                console.log("勾选的资源：",resources);
+
+                //保存时，只需保存资源id，所以使用id数组进行资源传递
+                let resourceIds = [];
+                for(let i = 0;i < resources.length;i++){
+                    resourceIds.push(resources[i].id);
+                }
+
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER +  '/system/admin/role/save-resource',
+                    {
+                        id:_this.role.id,
+                        resourceIds:resourceIds
+                    }
+                ).then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    if(resp.success){
+                        $('#form-modal').modal('hide');
+                        _this.list(1);
+                        Toast.success('保存成功');
+                    }else{
+                        Toast.warning(resp.message);
+                    }
+
+                })
+            }
   }
 }
 </script>
