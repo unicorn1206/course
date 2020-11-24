@@ -48,6 +48,27 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
+        <!--角色资源关联配置-->
+        <div id="resource-modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">角色资源关联配置</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <ul id="tree" class="ztree"></ul>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" v-on:click="save()">保存</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
         <table id="simple-table" class="table  table-bordered table-hover">
                     <thead>
                     <tr>
@@ -65,6 +86,10 @@
                         <td>{{role.desc}}</td>
                         <td>
                             <div class="hidden-sm hidden-xs btn-group">
+
+                                <button v-on:click="editResource(role)" class="btn btn-xs btn-info">
+                                    <i class="ace-icon fa fa-list bigger-120"></i>
+                                </button>
 
                                 <button v-on:click="edit(role)" class="btn btn-xs btn-info">
                                     <i class="ace-icon fa fa-pencil bigger-120"></i>
@@ -126,6 +151,8 @@
                 // courseId:"",
                 // name:'',
                 roles:[],//列表展示
+                resources:[],
+                tree:{}
             }
         },
         mounted:function () {
@@ -155,6 +182,54 @@
                 $('#form-modal').modal('show');
             },
 
+            /**
+             * 点击【编辑】
+             */
+            editResource(role){
+                let _this = this;
+                _this.role = $.extend({},role);//将role对象复制到一个空对象{}
+                _this.loadResource();
+                $('#resource-modal').modal('show');
+            },
+
+            /**
+             * 加载资源树
+             */
+            loadResource() {
+                let _this = this;
+                Loading.show();
+                _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/resource/load-tree').then((response) => {
+                    Loading.hide();
+                    let resp = response.data;
+                    _this.resources = resp.content;
+                    //初始化树
+                    _this.initTree();
+                })
+            },
+
+            /**
+             * 初始化资源树
+             */
+            initTree(){
+                let _this = this;
+                let setting = {
+                    check:{
+                        enable:true
+                    },
+                    data: {
+                        simpleData: {
+                            idKey: "id",
+                            pIdKey: "parent",
+                            rootPId: "",
+                            enable:true
+                        }
+                    }
+                };
+
+                let zNodes = _this.resources;
+                _this.tree = $.fn.zTree.init($("#tree"), setting, zNodes);
+                _this.tree.expandAll(true);
+            },
             /**
              * 列表查询
              */
