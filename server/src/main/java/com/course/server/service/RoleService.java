@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -96,5 +97,19 @@ public class RoleService {
             roleResource.setResourceId(resourceIds.get(i));
             roleResourceMapper.insert(roleResource);
         }
+    }
+
+    /**
+     * 按角色加载资源
+     */
+    public List<String> listResource(String roleId) {
+        RoleResourceExample roleResourceExample = new RoleResourceExample();
+        roleResourceExample.createCriteria().andRoleIdEqualTo(roleId);
+        List<RoleResource> roleResources = roleResourceMapper.selectByExample(roleResourceExample);
+        List<String> resourceIdList = new ArrayList<String>();
+        for(int i = 0;i < roleResources.size();i++){
+            resourceIdList.add(roleResources.get(i).getResourceId());
+        }
+        return resourceIdList;
     }
 }

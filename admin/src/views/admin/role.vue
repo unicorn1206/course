@@ -183,7 +183,7 @@
             },
 
             /**
-             * 点击【编辑】
+             * 点击【编辑角色资源】
              */
             editResource(role){
                 let _this = this;
@@ -204,6 +204,7 @@
                     _this.resources = resp.content;
                     //初始化树
                     _this.initTree();
+                    _this.listRoleResource();
                 })
             },
 
@@ -229,6 +230,26 @@
                 let zNodes = _this.resources;
                 _this.tree = $.fn.zTree.init($("#tree"), setting, zNodes);
                 _this.tree.expandAll(true);
+            },
+            /**
+             * 加载角色资源关联记录
+             */
+            listRoleResource(){
+                let _this = this;
+                Loading.show();
+                _this.$ajax.get(process.env.VUE_APP_SERVER +  '/system/admin/role/list-resource/' + _this.role.id,).then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    let resources = resp.content;
+
+                    //勾选查询到的资源，先把树的所有节点清空勾选，再勾选查询到的节点
+                    _this.tree.checkAllNodes(false);
+                    for(let i = 0;i < resources.length;i++){
+                        let node = _this.tree.getNodeByParam("id",resources[i]);
+                        _this.tree.checkNode(node,true);
+                    }
+
+                })
             },
             /**
              * 列表查询
