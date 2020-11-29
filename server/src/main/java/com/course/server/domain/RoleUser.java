@@ -23,7 +23,7 @@ public class RoleUser {
         this.roleId = roleId;
     }
 
-    public String getUserId(String s) {
+    public String getUserId() {
         return userId;
     }
 
@@ -43,4 +43,6 @@ public class RoleUser {
         sb.append("]");
         return sb.toString();
     }
+
+
 }
