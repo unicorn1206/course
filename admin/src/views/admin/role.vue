@@ -100,7 +100,7 @@
                                         <td>{{user.loginName}}</td>
                                         <td class="text-right">
                                             <a v-on:click="deleteUser(user)" href="javascript:;" class="">
-                                                <i class="ace-icon fa fa-arrow-circle-right blue"></i>
+                                                <i class="ace-icon fa fa-trash blue"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -111,7 +111,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary" v-on:click="saveResource()">保存</button>
+                        <button type="button" class="btn btn-primary" v-on:click="saveUser()">保存</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -408,7 +408,7 @@
                     Loading.hide();
                     let resp = response.data;
                     if(resp.success){
-                        $('#form-modal').modal('hide');
+                        $('#resource-modal').modal('hide');
                         _this.list(1);
                         Toast.success('保存成功');
                     }else{
@@ -435,6 +435,57 @@
                         Toast.warning(resp.message);
                     }
 
+                })
+            },
+            /**
+             * 角色中增加用户
+             */
+            addUser(user){
+                let _this = this;
+
+                //如果当前要添加的用户在右边列表中已经有了，则不用再添加
+                let users = _this.roleUsers;
+                for(let i = 0;i < users.length;i++){
+                    if(user === user[i]){
+                        return;
+                    }
+                }
+                _this.roleUsers.push(user);
+            },
+            /**
+             * 角色中删除用户
+             */
+            deleteUser(user){
+                let _this = this;
+                Tool.removeObj(_this.roleUsers,user);
+            },
+            /**
+             * 角色用户模态框点击【保存】
+             */
+            saveUser(){
+                let _this = this;
+                let users = _this.roleUsers;
+
+                let userIds = [];
+                for(let i = 0;i < users.length;i++){
+                    userIds.push(users[i].id);
+                }
+                //Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER +  '/system/admin/role/save-user',
+                    {
+                        id:_this.role.id,
+                        userIds:userIds
+                    }
+                ).then((response)=>{
+                    console.log('保存角色用户结果：',response);
+                    //Loading.hide();
+                    let resp = response.data;
+                    if(resp.success){
+                        //$('#form-modal').modal('hide');
+                        Toast.success('保存成功');
+                    }else{
+                        Toast.warning(resp.message);
+                    }
                 })
             }
         }

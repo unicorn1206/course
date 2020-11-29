@@ -23,7 +23,7 @@ public class RoleUser {
         this.roleId = roleId;
     }
 
-    public String getUserId() {
+    public String getUserId(String s) {
         return userId;
     }
 
