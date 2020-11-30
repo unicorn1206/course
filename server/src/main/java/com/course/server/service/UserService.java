@@ -1,13 +1,16 @@
 package com.course.server.service;
 
+import com.alibaba.fastjson.JSON;
 import com.course.server.domain.User;
 import com.course.server.domain.UserExample;
 import com.course.server.dto.LoginUserDto;
+import com.course.server.dto.ResourceDto;
 import com.course.server.dto.UserDto;
 import com.course.server.dto.PageDto;
 import com.course.server.exception.BusinessException;
 import com.course.server.exception.BusinessExceptionCode;
 import com.course.server.mapper.UserMapper;
+import com.course.server.mapper.my.MyUserMapper;
 import com.course.server.util.CopyUtil;
 import com.course.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
@@ -19,8 +22,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -30,6 +32,9 @@ public class UserService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private MyUserMapper myUserMapper;
 
     /**
      * 列表查询
@@ -126,12 +131,37 @@ public class UserService {
         }else{
             if(userDto.getPassword().equals(user.getPassword())){
                 //登录成功
-                return CopyUtil.copy(user,LoginUserDto.class);
+                LoginUserDto loginUserDto = CopyUtil.copy(user, LoginUserDto.class);
+                //为登录用户读取权限
+                setAuth(loginUserDto);
+                return loginUserDto;
             }else{
                 LOG.info("密码不对，输入密码：{}，数据库密码：{}",userDto.getPassword(),user.getPassword());
                 throw new BusinessException(BusinessExceptionCode.LOGIN_ERROR);
             }
         }
+    }
+
+    /**
+     * 为登录用户读取权限
+     * @param loginUserDto
+     */
+    private void setAuth(LoginUserDto loginUserDto){
+        List<ResourceDto> resourcesDtoList = myUserMapper.findResources(loginUserDto.getId());
+        loginUserDto.setResources(resourcesDtoList);
+
+        HashSet<String> requestSet = new HashSet<>();
+        if(!CollectionUtils.isEmpty(resourcesDtoList)){
+            for(ResourceDto resourceDto : resourcesDtoList){
+                String arrayString = resourceDto.getRequest();
+                List<String> requestList = JSON.parseArray(arrayString, String.class);
+                if(!CollectionUtils.isEmpty(requestList)){
+                    requestSet.addAll(requestList);
+                }
+            }
+        }
+        LOG.info("有权限的请求：{}",requestSet);
+        loginUserDto.setRequests(requestSet);
     }
 
 }
