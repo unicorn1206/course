@@ -138,9 +138,10 @@
 
 <script>
     import Pagination from '../../components/pagination'//引入子组件2-1
+    import BigFile from '../../components/big-file'
     import File from '../../components/file'
     export default {
-        components: {Pagination,File},//引入子组件2-2
+        components: {Pagination,BigFile,File},//引入子组件2-2
         name: "business-teacher",
         data: function () {
             return {

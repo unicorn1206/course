@@ -44,15 +44,6 @@
             let formData = new window.FormData();
             let file = _this.$refs.file.files[0];
             let fileName = file.name;
-            console.log(file);
-
-            //生成文件标识，标识多次上传的是不是同一个文件
-            let key = hex_md5(file);
-            let key10 = parseInt(key,16);
-            let key62 = Tool._10to62(key10);
-            console.log(key,key10,key62);
-
-            //判断文件格式
             let suffixs = _this.suffixs;
             let suffix = fileName.substring(fileName.lastIndexOf(".") + 1,fileName.length).toLowerCase();
             let validateSuffix = false;
@@ -69,8 +60,8 @@
             }
             //文件分片
             let shardSize = 20 * 1024 * 1024; //以20MB为一个分片
-            let shardIndex = 1; //分片索引,1表示第一个分片
-            let start = (shardIndex - 1) * shardSize; //当前分片起始位置
+            let shardIndex = 0; //分片索引
+            let start = shardIndex * shardSize; //当前分片起始位置
             let end = Math.min(file.size,start + shareSize); //当前分片结束位置
             let fileshard = file.slice(start,end); //从文件中截取当前的分片数据
 
@@ -86,7 +77,6 @@
             formData.append('name',file.name);
             formData.append('suffix',suffix);
             formData.append('size',size);
-            formData.append('key',key62);
             Loading.show();
             _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload/',formData
             ).then((response) => {

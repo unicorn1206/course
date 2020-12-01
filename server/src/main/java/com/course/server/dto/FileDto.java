@@ -51,6 +51,12 @@ public class FileDto {
 
     private Integer shardSize;
 
+    /**
+     * base64
+     */
+    private String shard;
+
+
     public Integer getShardIndex() {
         return shardIndex;
     }
@@ -152,21 +158,31 @@ public class FileDto {
     }
 
 
+    public String getShard() {
+        return shard;
+    }
+
+    public void setShard(String shard) {
+        this.shard = shard;
+    }
+
     @Override
     public String toString() {
-        return "FileDto{" +
-                "id='" + id + '\'' +
-                ", path='" + path + '\'' +
-                ", name='" + name + '\'' +
-                ", suffix='" + suffix + '\'' +
-                ", size=" + size +
-                ", use='" + use + '\'' +
-                ", createAt=" + createAt +
-                ", updateAt=" + updateAt +
-                ", shardIndex=" + shardIndex +
-                ", shardSize=" + shardSize +
-                ", shardTotal=" + shardTotal +
-                ", key='" + key + '\'' +
-                '}';
+        final StringBuffer sb = new StringBuffer("FileDto{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", path='").append(path).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", suffix='").append(suffix).append('\'');
+        sb.append(", size=").append(size);
+        sb.append(", use='").append(use).append('\'');
+        sb.append(", createAt=").append(createAt);
+        sb.append(", updateAt=").append(updateAt);
+        sb.append(", shardIndex=").append(shardIndex);
+        sb.append(", shardSize=").append(shardSize);
+        sb.append(", shard='").append(shard).append('\'');
+        sb.append(", shardTotal=").append(shardTotal);
+        sb.append(", key='").append(key).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

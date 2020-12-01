@@ -46,7 +46,7 @@ public class FileService {
             this.insert(file);
         } else {
             fileDb.setShardIndex(fileDto.getShardIndex());
-            this.update(fileDb );
+            this.update(fileDb);
         }
     }
 
@@ -76,14 +76,23 @@ public class FileService {
         fileMapper.deleteByPrimaryKey(id);
     }
 
-    public File selectByKey(String key){
+    public com.course.server.domain.File selectByKey(String key){
         FileExample fileExample = new FileExample();
-        fileExample.createCriteria().andIdEqualTo(key);
-        List<File> fileList = fileMapper.selectByExample(fileExample);
+        fileExample.createCriteria().andKeyEqualTo(key);
+        List<com.course.server.domain.File> fileList = fileMapper.selectByExample(fileExample);
         if(CollectionUtils.isEmpty(fileList)){
             return null;
         }else{
             return fileList.get(0);
         }
+    }
+
+    /**
+     * 根据文件标识查询数据库记录
+     * @param key
+     * @return
+     */
+    public FileDto findByKey(String key){
+        return CopyUtil.copy(selectByKey(key),FileDto.class);
     }
 }

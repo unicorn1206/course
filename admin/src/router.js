@@ -10,6 +10,9 @@ import Category from './views/admin/category'
 import Teacher from './views/admin/teacher'
 import File from './views/admin/file'
 import Content from './views/admin/content'
+import User from './views/admin/user'
+import Resource from './views/admin/resource'
+import Role from './views/admin/role'
 
 Vue.use(Router);
 
@@ -20,12 +23,18 @@ export default new Router({
         path:'*',
         redirect:'/login'
     },{
+        path:'',
+        redirect:'/login'
+    },{
         path:'/login',
         component:Login
     },{
         path:'/',
         name:'admin',
         component:Admin,
+        meta:{
+            loginRequire:true
+        },
         children:[{
             path:'welcome',//子路由前面无"/"
             name:'welcome',
@@ -58,6 +67,18 @@ export default new Router({
             path:'business/content',
             name:'business/content',
             component:Content
+        },{
+            path:'system/user',
+            name:'system/user',
+            component:User
+        },{
+            path:'system/resource',
+            name:'system/resource',
+            component:Resource
+        },{
+            path:'system/role',
+            name:'system/role',
+            component:Role
         }]
     }]
 })
