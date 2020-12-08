@@ -361,7 +361,7 @@
 
                         <b class="arrow"></b>
                     </li>
-                    <li class="">
+                    <li v-show="hasResource('01')" class="">
                         <a href="#" class="dropdown-toggle">
                             <i class="menu-icon fa fa-list"></i>
                             <span class="menu-text"> 系统管理 </span>
@@ -372,7 +372,7 @@
                         <b class="arrow"></b>
 
                         <ul class="submenu">
-                            <li class="" id="system-user-sidebar">
+                            <li v-show="hasResource('0101')" class="" id="system-user-sidebar">
                                 <router-link to="/system/user">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     用户管理
@@ -381,7 +381,7 @@
                                 <b class="arrow"></b>
                             </li>
 
-                            <li class="" id="system-resource-sidebar">
+                            <li v-show="hasResource('0102')" class="" id="system-resource-sidebar">
                                 <router-link to="/system/resource">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     资源管理
@@ -389,7 +389,8 @@
 
                                 <b class="arrow"></b>
 
-                            </li><li class="" id="system-role-sidebar">
+                            </li>
+                            <li v-show="hasResource('0103')" class="" id="system-role-sidebar">
                                 <router-link to="/system/role">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     角色管理
@@ -546,12 +547,22 @@
             $.getScript('/ace/assets/js/ace.min.js');
 
             _this.loginUser = Tool.getLoginUser();
+
+            if(!_this.hasResourceRouter(_this.$route.name)){
+                _this.$router.push("/login");
+            }
         },
         watch:{
             $route:{
                 handler:function (val,oldVal) {//sidebar样式激活方法二
                     console.log("页面跳转：" + oldVal + "----->" + val);
                     let _this = this;
+
+                    if(!_this.hasResourceRouter(_this.$route.name)){
+                        _this.$router.push("/login");
+                        return;
+                    }
+
                     _this.$nextTick(function () {//页面加载完成后执行
                         _this.activeSideBar(_this.$route.name.replace("/", "-") + "-sidebar");
                     })
@@ -559,6 +570,28 @@
             }
         },
         methods:{
+            /**
+             * 查找是否有路由权限
+             */
+            hasResourceRouter(router){
+                let _this = this;
+                let resources = _this.loginUser.resources;
+                if(Tool.isEmpty(resources)){
+                    return false;
+                }
+                for(let i = 0;i < resources.length;i++){
+                    if(router === resources[i].page){
+                        return true;
+                    }
+                }
+                return false;
+            },
+            /**
+             * 查找是否有按钮权限
+             */
+            hasResource:function(id){
+                return Tool.hasResource(id);
+            },
             activeSideBar:function (id) {
                 //兄弟菜单去掉active样式，自身增加active样式
                 $("#" + id).siblings().removeClass('active');
