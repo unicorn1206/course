@@ -28,13 +28,16 @@
         components: {Pagination, TheCourse},
         data:function () {
             return{
-                courses:[]
+                courses:[],
+                level1:[],
+                level2:[]
             }
         },
         mounted() {
             let _this = this;
             _this.$refs.pagination.size = 1;
             _this.listCourse(1);
+            _this.allCategory();
         },
         methods:{
             /**
@@ -54,7 +57,37 @@
                 }).catch((response) => {
                     console.log("error:",response);
                 })
-            }
+            },
+            /**
+             * 所有分类查询
+             */
+            allCategory(){
+                let _this = this;
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER +  '/business/web/category/all').then((response)=>{
+                    Loading.hide();
+                    let resp = response.data;
+                    _this.categorys = resp.content;
+                    //将所有的记录格式化成树形结构
+                    _this.level1 = [];
+                    for(let i = 0;i < _this.categorys.length;i++){
+                        let c = _this.categorys[i];
+                        if(c.parent == '00000000'){
+                            _this.level1.push(c);
+                        }
+                        for(let j = 0;j < _this.categorys.length;j++){
+                            let child = _this.categorys[j];
+                            if(child.parent == c.id){
+                                if(Tool.isEmpty( c.children)){
+                                    c.children = [];
+                                }
+                                c.children.push(child);
+                            }
+                        }
+                    }
+                    _this.level2 = [];
+                })
+            },
         }
     }
 </script>
