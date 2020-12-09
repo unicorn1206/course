@@ -6,7 +6,7 @@
                     <div v-for="o in courses" v-bind:key="o.name" class="col-md-4">
                         <the-course v-bind:course="o"></the-course>
                     </div>
-                    <h3 v-show="course.length === 0">课程还未上架</h3>
+                    <h3 v-show="courses.length === 0">课程还未上架</h3>
                 </div>
             </div>
         </div>
@@ -32,17 +32,19 @@
             /**
              * 查找课程列表
              */
-            listCourse(){
+            listCourse(page){
                 let _this = this;
                 Loading.show();
-                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/list', {
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/course/list', {
                     page: page,
-                    size: _this.$refs.pagination.size//获取组件内部的size变量
+                    size: 3
                 }).then((response) => {
                     Loading.hide();
                     let resp = response.data;
                     _this.courses = resp.content.list;
-                    _this.$refs.pagination.render(page, resp.content.total);//重新渲染当前组件，所选页数的底色
+                    //_this.$refs.pagination.render(page, resp.content.total);//重新渲染当前组件，所选页数的底色
+                }).catch((response) => {
+                    console.log("error:",response);
                 })
             }
         }
