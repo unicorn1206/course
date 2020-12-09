@@ -3,6 +3,12 @@
         <div class="album py-5 bg-light">
             <div class="container">
                 <div class="row">
+                    <div class="col-md-12">
+                       <pagination ref="pagination" v-bind:list="listCourse"></pagination>
+                    </div>
+
+                </div>
+                <div class="row">
                     <div v-for="o in courses" v-bind:key="o.name" class="col-md-4">
                         <the-course v-bind:course="o"></the-course>
                     </div>
@@ -16,9 +22,10 @@
 
 <script>
     import TheCourse from "../components/the-course";
+    import Pagination from "../components/pagination";
     export default {
         name: "index",
-        components: {TheCourse},
+        components: {Pagination, TheCourse},
         data:function () {
             return{
                 courses:[]
@@ -26,7 +33,8 @@
         },
         mounted() {
             let _this = this;
-            _this.listCourse();
+            _this.$refs.pagination.size = 1;
+            _this.listCourse(1);
         },
         methods:{
             /**
@@ -37,12 +45,12 @@
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/course/list', {
                     page: page,
-                    size: 3
+                    size: _this.$refs.pagination.size
                 }).then((response) => {
                     Loading.hide();
                     let resp = response.data;
                     _this.courses = resp.content.list;
-                    //_this.$refs.pagination.render(page, resp.content.total);//重新渲染当前组件，所选页数的底色
+                    _this.$refs.pagination.render(page, resp.content.total);//重新渲染当前组件，所选页数的底色
                 }).catch((response) => {
                     console.log("error:",response);
                 })
