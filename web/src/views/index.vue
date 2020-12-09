@@ -14,7 +14,7 @@
 
         <div class="album py-5 bg-light">
             <div class="container">
-
+                <div class="title1">最新上线</div>
                 <div class="row">
                     <div v-for="o in news" v-bind:key="o.name" class="col-md-4">
                         <div class="card mb-4 shadow-sm">
@@ -35,7 +35,29 @@
                             </div>
                         </div>
                     </div>
-
+                </div>
+                <hr>
+                <div class="title2">好课推荐</div>
+                <div class="row">
+                    <div v-for="o in news" v-bind:key="o.name" class="col-md-4">
+                        <div class="card mb-4 shadow-sm">
+                            <img class="img-fluid" v-bind:src="o.image">
+                            <div class="card-body">
+                                <h4>{{o.name}}</h4>
+                                <p class="card-text">{{o.summary}}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <div class="text-muted">
+                                        <span class="badge badge-info"><i class="fa fa-yen" aria-hidden="true"></i>&nbsp;{{o.price}}</span>&nbsp;
+                                        <span class="badge badge-info"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;{{o.enroll}}</span>&nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,5 +98,25 @@
 </script>
 
 <style scoped>
-
+    .title1{
+        margin-bottom: 2rem;
+        color: #fafafa;
+        letter-spacing: 0;
+        text-shadow: 0px 1px 0px #999,0px 2px 0px #888,0px 3px 0px #777,0px 4px 0px #666;
+        font-size:2rem;
+    }
+    .title2{
+        margin-bottom: 2rem;
+        color: transparent;
+        -webkit-text-stroke: 1px black;
+        letter-spacing: 0.04em;
+        font-size:2rem;
+    }
+    .course h4{
+        font-size: 1.25rem;
+        margin:15px 0;
+    }
+    .course .text-muted .badge{
+        font-size: 1rem;
+    }
 </style>
