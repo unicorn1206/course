@@ -77,6 +77,46 @@ public class CourseDto {
 
     private List<CategoryDto> categorys;
 
+    private List<ChapterDto> chapters;
+
+    private List<SectionDto> sections;
+
+    public List<ChapterDto> getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(List<ChapterDto> chapters) {
+        this.chapters = chapters;
+    }
+
+    public List<SectionDto> getSections() {
+        return sections;
+    }
+
+    public void setSections(List<SectionDto> sections) {
+        this.sections = sections;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public TeacherDto getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(TeacherDto teacher) {
+        this.teacher = teacher;
+    }
+
+    private String content;
+
+    private TeacherDto teacher;
+
     public String getTeacherId() {
         return teacherId;
     }
@@ -217,6 +257,10 @@ public class CourseDto {
         sb.append(", createAt=").append(createAt);
         sb.append(", updateAt=").append(updateAt);
         sb.append(", categorys=").append(categorys);
+        sb.append(", chapters=").append(chapters);
+        sb.append(", sections=").append(sections);
+        sb.append(", content='").append(content).append('\'');
+        sb.append(", teacher=").append(teacher);
         sb.append(", teacherId='").append(teacherId).append('\'');
         sb.append('}');
         return sb.toString();
