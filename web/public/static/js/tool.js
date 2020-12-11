@@ -133,5 +133,24 @@ Tool = {
       }
     }
     return false;
+  },
+  /**
+   * 对象数组按key对应的值排序
+   * @param array section=[{id:"aaa",sort=2},{id:"bbb",sort=1}]
+   * @param key sort,按sort排序
+   * @returns {*} 结果：sections=[{id:"bbb",sort=1},{id:"aaa",sort=2}]
+   */
+  sortAsc: function (array,  ) {
+    return array.sort(function (obj1, obj2) {
+      let val1 = obj1[key];
+      let val2 = obj2[key];
+      if (val1 < val2) {
+        return -1;
+      } else if (val1 > val2) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
   }
 };
