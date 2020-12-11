@@ -40,10 +40,33 @@
                         <br>
 
                         <div class="tab -content">
-                            <div class="tab-pane active" id="info" v-html="course.content">
+                            <div class="tab-pane active" id="info" v-html="course.content"></div>
 
+                            <div class="tab-pane" id="chapter">
+                                <div v-for="chapter in chapters" v-bind:key="chapter.id" class="chapter">
+                                    <div class="chapter-chapter">
+                                        <span class="folder-button">{{chapter.name}}</span>
+                                    </div>
+                                    <div>
+                                        <table class="table table-striped">
+                                            <!--v-for中，s：section对象；j：索引号，从0开始-->
+                                            <tr v-for="(s,j) in chapter.sections" class="chapter-section-tr">
+                                                <td class="col-sm-8 col-xs-12">
+                                                    <div class="section-title">
+                                                        <i class="fa fa-video-camera d-none d-sm-inline"></i>&nbsp;&nbsp;
+                                                        <span class="d-none d-sm-inline">第{{j+1}}节&nbsp;&nbsp;</span>
+                                                        {{s.title}}
+                                                        <span v-show="s.charge !== SECTION_CHARGE.CHARGE.key" class="badge badge-primary hidden-xs">免费</span>
+                                                    </div>
+                                                </td>
+                                                <td class="col-sm-1 text-right">
+                                                    <span class="badge badge-primary">{{s.time | formatSecond}}</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="tab-pane" id="chapter"></div>
                         </div>
                     </div>
 
@@ -77,7 +100,8 @@
                 COURSE_LEVEL:COURSE_LEVEL,
                 teacher:{},
                 chapters:[],
-                sections:[]
+                sections:[],
+                SECTION_CHARGE:SECTION_CHARGE
             }
         },
         mounted() {
@@ -95,7 +119,19 @@
                     _this.chapters = _this.course.chapters || [];
                     _this.sections = _this.course.sections || [];
 
+                    // 将所有的节放入对应的章中
+                    for (let i = 0; i < _this.chapters.length; i++) {
+                        let c = _this.chapters[i];
+                        c.sections = [];
+                        for (let j = 0; j < _this.sections.length; j++) {
+                            let s = _this.sections[j];
+                            if (c.id === s.chapterId) {
+                                c.sections.push(s);
+                            }
+                        }
 
+                        Tool.sortAsc(c.sections, "sort");
+                    }
                 })
             },
         }
