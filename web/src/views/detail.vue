@@ -43,11 +43,15 @@
                             <div class="tab-pane active" id="info" v-html="course.content"></div>
 
                             <div class="tab-pane" id="chapter">
-                                <div v-for="chapter in chapters" v-bind:key="chapter.id" class="chapter">
-                                    <div class="chapter-chapter">
-                                        <span class="folder-button">{{chapter.name}}</span>
+                                <div v-for="(chapter,i) in chapters" v-bind:key="chapter.id" class="chapter">
+                                    <div v-on:click="doFolder(chapter,i)" class="chapter-chapter">
+                                        <span>{{chapter.name}}</span>
+                                        <span class="pull-right">
+                                            <i v-show="chapter.folded" class="fa fa-plus-square" aria-hidden="true"></i>
+                                            <i v-show="!chapter.folded" class="fa fa-minus-square" aria-hidden="true"></i>
+                                        </span>
                                     </div>
-                                    <div>
+                                    <div v-show="!chapter.folded">
                                         <table class="table table-striped">
                                             <!--v-for中，s：section对象；j：索引号，从0开始-->
                                             <tr v-for="(s,j) in chapter.sections" class="chapter-section-tr">
@@ -134,6 +138,15 @@
                     }
                 })
             },
+            /**
+             * 展开/收缩一个章节
+             */
+            doFolder(chapter,i){
+                let _this = this;
+                chapter.folded = true;
+                //在v-for里写v-show，只修改属性不起作用，需要$set
+                _this.$set(_this.chapters,i,chapter);
+            }
         }
     }
 </script>
