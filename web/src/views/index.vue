@@ -15,14 +15,14 @@
             <div class="container">
                 <div class="title1">最新上线</div>
                 <div class="row">
-                    <div v-for="o in news" v-bind:key="o.name" class="col-md-4">
+                    <div v-for="o in news" v-bind:key="o.id" class="col-md-4">
                         <the-course v-bind:course="o"></the-course>
                     </div>
                 </div>
                 <hr>
                 <div class="title2">好课推荐</div>
                 <div class="row">
-                    <div v-for="o in news" v-bind:key="o.name" class="col-md-4">
+                    <div v-for="o in news" v-bind:key="o.id" class="col-md-4">
                         <the-course v-bind:course="o"></the-course>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                     if (resp.success){
                         _this.news = resp.content;
                     }
-                }).catch((responce) => {
+                }).catch((response) => {
                     console.log("error:",response);
                 })
             }

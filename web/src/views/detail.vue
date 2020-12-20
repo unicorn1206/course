@@ -23,8 +23,7 @@
                     </div>
                 </div>
 
-                <div class="row">
-
+                <div class="row" style="margin-top: 10px;">
                     <!-- 课程内容 & 大章小节 -->
                     <div class="col-md-9">
                         <!-- Nav tabs -->
@@ -37,9 +36,9 @@
                             </li>
                         </ul>
 
-                        <br>
 
-                        <div class="tab -content">
+
+                        <div class="tab-content">
                             <div class="tab-pane active" id="info" v-html="course.content"></div>
 
                             <div class="tab-pane" id="chapter">
@@ -54,7 +53,7 @@
                                     <div v-show="!chapter.folded">
                                         <table class="table table-striped">
                                             <!--v-for中，s：section对象；j：索引号，从0开始-->
-                                            <tr v-for="(s,j) in chapter.sections" class="chapter-section-tr">
+                                            <tr v-for="(s,j) in chapter.sections" v-bind:key="s.id" class="chapter-section-tr">
                                                 <td class="col-sm-8 col-xs-12">
                                                     <div v-on:click="play(s)" class="section-title">
                                                         <i class="fa fa-video-camera d-none d-sm-inline"></i>&nbsp;&nbsp;
@@ -75,7 +74,7 @@
                     </div>
 
                     <!-- 讲师信息 -->
-                    <div>
+                    <div class="col-md-3">
                         <div class="card" style="width: 18rem;">
                             <img v-bind:src="teacher.image" class="card-img-top">
                             <div class="card-body">
@@ -145,7 +144,7 @@
              */
             doFolder(chapter,i){
                 let _this = this;
-                chapter.folded = true;
+                chapter.folded = !chapter.folded;
                 //在v-for里写v-show，只修改属性不起作用，需要$set
                 _this.$set(_this.chapters,i,chapter);
             },

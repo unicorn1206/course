@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import TheHeader from './components/the-header.vue'
+import TheHeader from './components/the-header.vue';
 import TheFooter from "./components/the-footer";
 
 export default {

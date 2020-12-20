@@ -22,7 +22,7 @@
     </update>
 
     <select id="list" resultType="com.course.server.dto.CourseDto">
-        select c.id,c.name,c.summary,time,price,image.level,
+        select c.id,c.name,c.summary,time,price,image,level,
         charge,status,enroll,sort,create_at as createAt,update_at as updateAt,teacher_id as teacherId
         from course c
         <if test="pageDto.categoryId != null and pageDto.categoryId != ''">

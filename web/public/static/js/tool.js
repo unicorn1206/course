@@ -140,7 +140,7 @@ Tool = {
    * @param key sort,按sort排序
    * @returns {*} 结果：sections=[{id:"bbb",sort=1},{id:"aaa",sort=2}]
    */
-  sortAsc: function (array,  ) {
+  sortAsc: function (array, key) {
     return array.sort(function (obj1, obj2) {
       let val1 = obj1[key];
       let val2 = obj2[key];

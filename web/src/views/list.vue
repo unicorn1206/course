@@ -46,9 +46,10 @@
 
 <script>
     import TheCourse from "../components/the-course";
+    import Pagination from "../components/pagination";
     export default {
         name: "index",
-        components: {TheCourse},
+        components: {TheCourse,Pagination},
         data:function () {
             return{
                 courses:[],
@@ -119,13 +120,13 @@
                 _this.level1Id = level1Id === '00000000' ? null : level1Id;
 
                 //点击一级分类时，显示激活状态
-                $("category-" + level1Id).sublings("a").removeClass("cur");
-                $("category-" + level1Id).addClass("cur");
+                $("#category-" + level1Id).siblings("a").removeClass("cur");
+                $("#category-" + level1Id).addClass("cur");
                 //点击一级分类时，二级分类【无限】按钮要设置激活状态
-                $("category-11111111").sublings("a").removeClass("on");
-                $("category-11111111").addClass("on");
+                $("#category-11111111").siblings("a").removeClass("on");
+                $("#category-11111111").addClass("on");
 
-                //注意：要先把level2中所有值情况，再放入值
+                //注意：要先把level2中所有值清空，再放入值
                 _this.level2 = [];
                 let categorys = _this.categorys;
                 //如果点击的是【全部】，显示所有的二级分类
@@ -155,8 +156,8 @@
              */
             onClickLevel2(level2Id){
                 let _this = this;
-                $("category-" + level2Id).sublings("a").removeClass("on");
-                $("category-" + level2Id).addClass("on");
+                $("#category-" + level2Id).siblings("a").removeClass("on");
+                $("#category-" + level2Id).addClass("on");
 
                 //点击二级分类时，设置变量，用于课程筛选
                 //如果点击的是【无限】，则二级分类id为空

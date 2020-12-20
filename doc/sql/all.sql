@@ -10,7 +10,7 @@ create table member(
                      primary key (id),
                      unique key mobile_unique(mobile)
 )engine=innodb default charset=utf8mb4 comment ='会员';
-insert into member values ('00000000','12345678901','123','','');
+insert into member values ('00000000','12345678901','123','','','');
 
 drop table if exists `role`;
 create table `role`(

@@ -1,40 +1,27 @@
 <template>
   <div class="pagination" role="group" aria-label="分页">
-    <button type="button" class="btn btn-outline-dark" 
-            v-bind:disabled="page === 1"
-            v-on:click="selectPage(1)">
+    <button type="button" class="btn btn-outline-dark" v-bind:disabled="page === 1" v-on:click="selectPage(1)">
       1
     </button>
-    <button type="button" class="btn btn-outline-dark" 
-            v-bind:disabled="page === 1"
-            v-on:click="selectPage(page - 1)">
+    <button type="button" class="btn btn-outline-dark" v-bind:disabled="page === 1" v-on:click="selectPage(page - 1)">
       上一页
     </button>
-    <button v-for="p in pages" v-bind:key="'page-' + p"
-            type="button" class="btn btn-outline-dark"
-            v-bind:class="{'btn-primary active':page == p}" 
-            v-on:click="selectPage(p)">
+    <button v-for="p in pages" v-bind:id="'page-' + p" v-bind:key="p" type="button"
+            v-bind:class="{'btn-primary active':page == p}" class="btn btn-outline-dark" v-on:click="selectPage(p)">
       {{p}}
     </button>
-    <button type="button" class="btn btn-outline-dark" 
-            v-bind:disabled="page === pageTotal"
-            v-on:click="selectPage(page + 1)">
+    <button type="button" class="btn btn-outline-dark" v-bind:disabled="page === pageTotal" v-on:click="selectPage(page + 1)">
       下一页
     </button>
-    <button type="button" class="btn btn-outline-dark"
-            v-bind:disabled="page === pageTotal"
-            v-on:click="selectPage(pageTotal)">
-      {{pageTotal||1}}<!--如果pageTotal为空，就填1-->
+    <button type="button" class="btn btn-outline-dark" v-bind:disabled="page === pageTotal" v-on:click="selectPage(pageTotal)">
+      {{pageTotal||1}}
     </button>
-    &nbsp;
-    
   </div>
 </template>
 
 <script>
   export default {
     name: 'pagination',
-      //props：定义父组件向子组件传递的参数，可以是一个函数或数据
     props: {
       list: {
         type: Function,
@@ -62,7 +49,7 @@
         _this.page = page;
         _this.total = total;
         _this.pageTotal = Math.ceil(total / _this.size);
-        _this.pages = _this.getPageItems(_this.pageTotal, page, _this.itemCount || 5);
+        _this.pages = _this.getPageItems(_this.pageTotal, page, _this.itemCount || 10);
       },
 
       /**
@@ -118,25 +105,17 @@
 <style scoped>
   .pagination {
     vertical-align: middle !important;
-    font-size: 16px;
+    font-size: 1rem;
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
   }
-
-  .pagination button {
-    margin-right: 5px;
+  .pagination button{
+    margin-right: 0.5rem;
   }
-
   .btn-primary.active {
-    background-color: #2f7bba !important;
+    background-color: #2f7bba!important;
     border-color: #27689d !important;
     color: white !important;
     font-weight: 600;
   }
-
-  /*.pagination select {*/
-  /*vertical-align: middle !important;*/
-  /*font-size: 16px;*/
-  /*margin-top: 0;*/
-  /*}*/
 </style>
