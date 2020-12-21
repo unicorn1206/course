@@ -31,31 +31,5 @@ public class MemberController {
         return responseDto;
     }
 
-    /**
-     * 保存，id有值时更新，无值时新增
-     */
-    @PostMapping("/save")
-    public ResponseDto save(@RequestBody MemberDto memberDto){
-        ResponseDto responseDto = new ResponseDto();
 
-        // 保存校验
-        ValidatorUtil.length(memberDto.getMobile(), "手机号", 1, 11);
-        ValidatorUtil.require(memberDto.getPassword(), "密码");
-        ValidatorUtil.length(memberDto.getName(), "昵称", 1, 50);
-        ValidatorUtil.length(memberDto.getPhoto(), "头像url", 1, 200);
-
-        memberService.save(memberDto);
-        responseDto.setContent(memberDto);
-        return responseDto;
-    }
-
-    /**
-     * 删除
-     */
-    @DeleteMapping("/delete/{id}")
-    public ResponseDto delete(@PathVariable String id){
-        ResponseDto responseDto = new ResponseDto();
-        memberService.delete(id);
-        return responseDto;
-    }
 }
