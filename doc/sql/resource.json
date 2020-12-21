@@ -19,7 +19,8 @@
   },{
     "id": "0103","name": "角色管理","page": "system/role",
     "children": [{
-      "id": "010301","name": "角色管理角色/权限管理","request": ["/system/admin/role"]
+      "id": "010301","name": "角色管理角色/权限管理","request": ["/system/admin/role"]},
+      {"id": "010302","name": "角色管理角色/权限管理","request": ["/system/admin/resource/load-tree"]
     }]
   }]
 },{
@@ -38,6 +39,11 @@
     "id": "0203","name": "讲师管理","page": "business/teacher",
     "children": [{
       "id": "020301","name": "增删改查","request": ["/business/admin/teacher"]
+    }]
+  },{
+    "id": "0204","name": "会员管理","page": "business/member",
+    "children": [{
+      "id": "020401","name": "增删改查","request": ["/business/admin/member"]
     }]
   }]
 },{
